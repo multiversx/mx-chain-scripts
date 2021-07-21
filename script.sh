@@ -18,7 +18,7 @@ if [ $# -eq 0 ]
 
   show_menu #Show all the menu options
 
-  COLUMNS=12
+  COLUMNS=13
   PS3="Please select an action:"
   options=("install" "observing_squad" "upgrade" "upgrade_squad" "upgrade_proxy" "remove_db" "start" "stop" "cleanup" "github_pull" "add_nodes" "get_logs" "quit")
 
