@@ -153,7 +153,14 @@ case "$1" in
   ;;
 
 'upgrade')
-  upgrade
+  #Check if running observing squad
+  if [ -e /etc/systemd/system/elrond-proxy.service ]; then 
+                echo -e "${RED}--> You are running in the OBSERVING SQUAD configuration. Redirecting to the ${CYAN}upgrade_squad${RED} option instead.${NC}"
+                echo -e
+                upgrade_squad                
+          else
+            upgrade    
+    fi
   ;;
 
 'upgrade_squad')
