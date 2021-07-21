@@ -8,6 +8,9 @@ source $SCRIPTPATH/config/variables.cfg
 source $SCRIPTPATH/config/functions.cfg
 source $SCRIPTPATH/config/menu_functions.cfg
 
+#Check GitHub API Limit
+check_api_limit
+
 #Check if there are newer versions of the scripts available
 cd $SCRIPTPATH
 CURRENT_SCRIPTS_COMMIT=$(git show | grep  -m 1 commit | awk '{print $2}')
