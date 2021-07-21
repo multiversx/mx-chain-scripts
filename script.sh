@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+#Make script aware of its location
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+
 source $SCRIPTPATH/config/variables.cfg
 source $SCRIPTPATH/config/functions.cfg
 source $SCRIPTPATH/config/menu_functions.cfg
