@@ -1,31 +1,13 @@
 #!/bin/bash
 set -e
 
-#Make script aware of its location
-SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
-
 source $SCRIPTPATH/config/variables.cfg
 source $SCRIPTPATH/config/functions.cfg
 source $SCRIPTPATH/config/menu_functions.cfg
 
-#Check GitHub API Limit
-check_api_limit
 
 #Check if there are newer versions of the scripts available
-cd $SCRIPTPATH
-CURRENT_SCRIPTS_COMMIT=$(git show | grep  -m 1 commit | awk '{print $2}')
-
-if [ "$LATEST_SCRIPTS_COMMIT" != "$CURRENT_SCRIPTS_COMMIT" ]; then
-  echo -e 
-  read -p "You aren't running the current versions of the scripts. Are you sure you want to continue ? (Yy/Nn)" yn
-  echo -e
-
-  case $yn in
-        [Yy]* ) ;;
-        [Nn]* ) echo "Ok.Exiting."; exit;;
-        * ) echo "Please answer Yy / Nn ..."; exit;;
-    esac
-fi
+check_scripts_version
 
 #See if the user has passed any command line arguments and if not show the menu
 if [ $# -eq 0 ]
