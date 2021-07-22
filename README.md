@@ -3,19 +3,22 @@
 ## INTRODUCTION
 
 The current scripts version aims to bring the validator experience to a higher standard.
+This variant of the scripts can be used on any of the Elronds Networks (mainnet,testnet or devnet) by setting the new `ENVIRONMENT` variable.
+Running an observers plus proxy stack is also supported on all Elrond Networks.
 Following a few simple steps, you can run your node(s) on the local machine.
 Each node will run in background as a separate systemd unit.
 
 
 ## REQUIREMENTS
 
-- Running Ubuntu 18.04 & up
+- Running Ubuntu 18.04, 20.04 & up
 - Running the script requires a user (not root) with sudo priviledges (without password).
 
 ## SCRIPT SETTINGS - MUST BE MODIFIED BEFORE FIRST RUN
 
-- config/variables.cfg - used to define username, home path, validator keys location, Github OAUTH Token, SSH port, extra node parameters.
-In this file, it is very important to set the `CUSTOM_HOME` and `CUSTOM_USER` variables. Whoever wants to use the keybase identity, should provide here the `IDENTITY` value as it will be written automatically by the upgrade script each time an upgrade occurs. 
+- config/variables.cfg - used to define the environment, username, home path, validator keys location, Github OAUTH Token, extra node parameters.
+In this file, it is very important to set the `ENVIRONMENT` , `CUSTOM_HOME` and `CUSTOM_USER` variables. Whoever wants to use the keybase identity, should provide here the `IDENTITY` value as it will be written automatically by the upgrade script each time an upgrade occurs.
+Additionally we strongly encourage you to generate your own Github OAUTH Token and add it to the `GITHUBTOKEN` variable inside the config/variables.cfg file
 
 ## KEY MANAGEMENT
 
@@ -52,20 +55,38 @@ Example of adding your validator keys to a zip file (node-0.zip):
 		
 		Running the script with the 'install' parameter will prompt for each machine the following:
 			- number of nodes to be ran on the machine
-			- validator display name for each node (this will only be asked one time)	
+			- validator display name for each node (this will only be asked one time)
+		
+		./script.sh observing_squad
+
+		Running the script with the 'observing_squad' parameter will deploy four observers (one for each shard) plus an instance of the Elrond Proxy
+			- please make sure your machine is able to comfortably run in such a configuration 
 			
 	[UPGRADE]
 		#upgrades the node(s) on the local machine
-		./script.sh upgrade
+		./script.sh upgrade - when running just nodes
+
+		./script.sh upgrade_squad - when running the observing squad configuratio
+
+		./script.sh upgrade_proxy - whenever you need to update the Elrond Proxy instance (in the observing squad configuration)
 		
 	[START]
 		#starts the node(s) on the local machine
-		./script.sh start
+		./script.sh start - allows you to either start all the nodes or select which ones to start (comma separated node ids) 
 		
 	[STOP]
 		#stops the node(s) on the local machine
-		./script.sh stop
-				
+		./script.sh stop  - allows you to either stop all the nodes or select which ones to stop (comma separated node ids)
+
+	[ADD NODES]
+		#allow users to add more nodes in addition to the ones already running on the local machine
+		./script.sh add_nodes
+
+		Running the script with the 'add_nodes' parameter will deploy further nodes on your machine.
+			- please take into account that additional hardware resources will be required for each new node
+			- make sure you add the keys for the new node (s) inside the `$CUSTOM_HOME/VALIDATOR_KEYS` folder
+			- this option is not compatible with the `observing_squad` configuration 
+
 	[CLEANUP]
 		#Removes all the node(s) files on the local machine
 		./script.sh cleanup
