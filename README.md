@@ -4,10 +4,11 @@
 
 The current scripts version aims to bring the validator experience to a higher standard.
 This variant of the scripts can be used on any of the Elronds Networks (mainnet,testnet or devnet) by setting the new `ENVIRONMENT` variable.
+The `ENVIRONMENT` variable will direct the scripts to use the correct elrond-configs repositories (elrond-config-mainnet|testnet|devnet).
 Running an observers plus proxy stack is also supported on all Elrond Networks.
 Following a few simple steps, you can run your node(s) on the local machine.
 Each node will run in background as a separate systemd unit.
-
+A new addition to the scripts is the performance assessment tool which you can use to benchmark your machine and ensure performance is adequate.
 
 ## REQUIREMENTS
 
@@ -98,7 +99,11 @@ Example of adding your validator keys to a zip file (node-0.zip):
 	[GET NODE LOGS]
 		#creates a tar.gz file containing the node logs
 		./script.sh get_logs 
-		
+
+	[BENCHMARK]
+		#runs the performance assessment tool and creates a CSV containing the results.
+		./script.sh benchmark 
+
 	[VERSION]
 		#Outputs the current version of the scripts
 		./script.sh version 
