@@ -30,19 +30,19 @@ For running additional nodes on the same machine, simply create additional zip f
 
 File structure example:
 
-	$CUSTOM_HOME/VALIDATOR_KEYS/node-0.zip
-	$CUSTOM_HOME/VALIDATOR_KEYS/node-1.zip
-	$CUSTOM_HOME/VALIDATOR_KEYS/node-2.zip
-	...
-	$CUSTOM_HOME/VALIDATOR_KEYS/node-x.zip
-	
+    $CUSTOM_HOME/VALIDATOR_KEYS/node-0.zip
+    $CUSTOM_HOME/VALIDATOR_KEYS/node-1.zip
+    $CUSTOM_HOME/VALIDATOR_KEYS/node-2.zip
+    ...
+    $CUSTOM_HOME/VALIDATOR_KEYS/node-x.zip
 
 If someone wishes to join the network as an observer, should run the following script for each installed node (replacing `node-0` string with `node-1`, `node-2` and so on)
+
 ```
 ~/elrond-utils/keygenerator
 mv validatorKey.pem ~/elrond-nodes/node-0/config
-``` 
- 
+```
+
 Example of adding your validator keys to a zip file (node-0.zip):
 1. Navigate to your current node install path and go into the /config folder
 2. Issue the command to create your zip archive: `zip node-0.zip *.pem` (repeat for each node on that machine incrementing the value 0,1,2...x)
@@ -50,63 +50,62 @@ Example of adding your validator keys to a zip file (node-0.zip):
 
 ## RUNNING THE SCRIPT
 
-	[FIRST RUN]
-		#installs the node(s) on the local machine
-		./script.sh install 
-		
-		Running the script with the 'install' parameter will prompt for each machine the following:
-			- number of nodes to be ran on the machine
-			- validator display name for each node (this will only be asked one time)
-		
-		./script.sh observing_squad
+    [FIRST RUN]
+        #installs the node(s) on the local machine
+        ./script.sh install 
 
-		Running the script with the 'observing_squad' parameter will deploy four observers (one for each shard) plus an instance of the Elrond Proxy
-			- please make sure your machine is able to comfortably run in such a configuration 
-			
-	[UPGRADE]
-		#upgrades the node(s) on the local machine
-		./script.sh upgrade - when running just nodes
+        Running the script with the 'install' parameter will prompt for each machine the following:
+            - number of nodes to be ran on the machine
+            - validator display name for each node (this will only be asked one time)
+        ./script.sh observing_squad
 
-		./script.sh upgrade_squad - when running the observing squad configuratio
+        Running the script with the 'observing_squad' parameter will deploy four observers (one for each shard) plus an instance of the Elrond Proxy
+            - please make sure your machine is able to comfortably run in such a configuration 
 
-		./script.sh upgrade_proxy - whenever you need to update the Elrond Proxy instance (in the observing squad configuration)
-		
-	[START]
-		#starts the node(s) on the local machine
-		./script.sh start - allows you to either start all the nodes or select which ones to start (comma separated node ids) 
-		
-	[STOP]
-		#stops the node(s) on the local machine
-		./script.sh stop  - allows you to either stop all the nodes or select which ones to stop (comma separated node ids)
+    [UPGRADE]
+        #upgrades the node(s) on the local machine
+        ./script.sh upgrade - when running just nodes
 
-	[ADD NODES]
-		#allow users to add more nodes in addition to the ones already running on the local machine
-		./script.sh add_nodes
+        ./script.sh upgrade_squad - when running the observing squad configuratio
 
-		Running the script with the 'add_nodes' parameter will deploy further nodes on your machine.
-			- please take into account that additional hardware resources will be required for each new node
-			- make sure you add the keys for the new node (s) inside the `$CUSTOM_HOME/VALIDATOR_KEYS` folder
-			- this option is not compatible with the `observing_squad` configuration 
+        ./script.sh upgrade_proxy - whenever you need to update the Elrond Proxy instance (in the observing squad configuration)
 
-	[CLEANUP]
-		#Removes all the node(s) files on the local machine
-		./script.sh cleanup
+    [START]
+        #starts the node(s) on the local machine
+        ./script.sh start - allows you to either start all the nodes or select which ones to start (comma separated node ids) 
+
+    [STOP]
+        #stops the node(s) on the local machine
+        ./script.sh stop  - allows you to either stop all the nodes or select which ones to stop (comma separated node ids)
+
+    [ADD NODES]
+        #allow users to add more nodes in addition to the ones already running on the local machine
+        ./script.sh add_nodes
+
+        Running the script with the 'add_nodes' parameter will deploy further nodes on your machine.
+            - please take into account that additional hardware resources will be required for each new node
+            - make sure you add the keys for the new node (s) inside the `$CUSTOM_HOME/VALIDATOR_KEYS` folder
+            - this option is not compatible with the `observing_squad` configuration 
+
+    [CLEANUP]
+        #Removes all the node(s) files on the local machine
+        ./script.sh cleanup
     
-	[SCRIPTS UPDATE]
-		#fetches the latest version of the scripts from github while backing up your configs
-		./script.sh github_pull
-		
-	[GET NODE LOGS]
-		#creates a tar.gz file containing the node logs
-		./script.sh get_logs 
+    [SCRIPTS UPDATE]
+        #fetches the latest version of the scripts from github while backing up your configs
+        ./script.sh github_pull
 
-	[BENCHMARK]
-		#runs the performance assessment tool and creates a CSV containing the results.
-		./script.sh benchmark 
+    [GET NODE LOGS]
+        #creates a tar.gz file containing the node logs
+        ./script.sh get_logs 
 
-	[VERSION]
-		#Outputs the current version of the scripts
-		./script.sh version 
+    [BENCHMARK]
+        #runs the performance assessment tool and creates a CSV containing the results.
+        ./script.sh benchmark 
+
+    [VERSION]
+        #Outputs the current version of the scripts
+        ./script.sh version 
 
 ## TERMUI NODE INFO
 
@@ -114,19 +113,18 @@ This version of scripts will start your nodes as separate systemd services and a
 This tool provides a console-graphical interface useful for providing node status in a user-friendly way. The binary will try to connect to the node over the rest API interface provided.
 During the install process your nodes will have rest api sockets assigned to them following this pattern:
 
-	elrond-node-0 will use localhost:8080
-	elrond-node-1 will use localhost:8081
-	elrond-node-2 will use localhost:8082
-	...
-	elrond-node-x will use localhost:(8080+x)
-	
+    elrond-node-0 will use localhost:8080
+    elrond-node-1 will use localhost:8081
+    elrond-node-2 will use localhost:8082
+    ...
+    elrond-node-x will use localhost:(8080+x)
 
 You can check the status of each of your nodes in turn by going to your $CUSTOM_HOME/elrond-utils/ folder and using this command (making sure you select the proper socket for the desired node):
 
-	./elrond-utils/termui -address localhost:8080
-	or
-	./elrond-utils/termui -address localhost:8081
-	...
+    ./elrond-utils/termui -address localhost:8080
+     or
+    ./elrond-utils/termui -address localhost:8081
+    ...
 
 ## LOGVIEWER INFO
 
@@ -134,19 +132,18 @@ This version of scripts will start your nodes as separate systemd services and a
 This tool provides a way of capturing (and even storing) logger lines generated by an elrond-node instance. The binary will try to connect to the node over the rest API interface provided.
 During the install process your nodes will have rest api sockets assigned to them following this pattern:
 
-	elrond-node-0 will use localhost:8080
-	elrond-node-1 will use localhost:8081
-	elrond-node-2 will use localhost:8082
-	...
-	elrond-node-x will use localhost:(8080+x)
-	
+    elrond-node-0 will use localhost:8080
+    elrond-node-1 will use localhost:8081
+    elrond-node-2 will use localhost:8082
+    ...
+    elrond-node-x will use localhost:(8080+x)
 
 You can check the status of each of your nodes in turn by going to your $CUSTOM_HOME/elrond-utils/ folder and using this command (making sure you select the proper socket for the desired node):
 
-	./elrond-utils/logviewer -address localhost:8080
-	or
-	./elrond-utils/logviewer -address localhost:8081
-	...
+    ./elrond-utils/logviewer -address localhost:8080
+    or
+    ./elrond-utils/logviewer -address localhost:8081
+    ...
 
 If the log level is not provided, it will start with the `*:INFO` pattern, meaning that all subpackages that assemble the elrond-go binary will only output INFO (or up) messages.
 There is another flag called `-level` that can be used to alter the logger pattern. The expected format is `MATCHING_STRING1:LOG_LEVEL1,MATCHING_STRING2:LOG_LEVEL2`
@@ -154,7 +151,7 @@ If matching string is *, it will change the log levels of all contained from all
 For example, having the parameter `process:DEBUG` will set the DEBUG level on all loggers that will contain the "process" string in their name ("process/sync", "process/interceptors", "process" and so on).
 The rules are applied in the exact order they are provided, starting from left to the right part of the string
 
-  Example: 
+  Example:
       `*:INFO,p2p:ERROR,*:DEBUG,data:INFO` will result in having the data package logger(s) on INFO log level and all other packages on DEBUG level
 
 Defined logger levels are: `NONE, ERROR, WARN, INFO, DEBUG, TRACE`
@@ -162,12 +159,12 @@ TRACE will output anything,
 NONE will practically silent everything. 
 Whatever is in between will display the provided level + the left-most part from the afore mentioned list.
 
-  Example: 
+  Example:
       `INFO` log level will output all logger lines with the levels `INFO` or `WARN` or `ERROR`.
 
 The flag for storing into a file the received logger lines is  `-file`
   
-  Example: 
+  Example:
           `./elrond-utils/logviewer -address localhost:8080 -level *:DEBUG,api:INFO -file` will start the binary that will try to connect to the locally-opened 8080 port, will set the log level
       to DEBUG for all packages except api package and will store all captured log lines in a file.
 
@@ -175,9 +172,9 @@ The flag for storing into a file the received logger lines is  `-file`
 
 If there's ever a need to start a separate seed/boot node - there's a seednode binary available in the $CUSTOM_HOME/elrond-utils folder.
 This binary will start a new seed node that can be used as a fallback if the primary seed nodes are experiencing issues.
-The seednode requires a p2p.toml file to use for its settings, so you would also have to download that configuration file:
+The seednode requires a p2p.toml file to use for its settings, so you would also have to download that configuration file (in accordance with your `ENVIRONMENT` variable):
 
-  	  `mkdir -p config && curl -o config/p2p.toml https://raw.githubusercontent.com/ElrondNetwork/elrond-config/master/p2p.toml`
+    `mkdir -p config && curl -o config/p2p.toml https://raw.githubusercontent.com/ElrondNetwork/elrond-config-(mainnet|testnet|devnet)/master/p2p.toml`
 
   Example:
       `./seeednode --help` will display all available arguments/options
@@ -188,9 +185,9 @@ The seednode requires a p2p.toml file to use for its settings, so you would also
 
 As of version 1.3.4 of the scripts there is a new command for extracting and tarballing your node logs. The tar file will be stored in the $CUSTOM_HOME/elrond-logs folder and will contain a timestamp in their name.
 
- Command Example: 
+ Command Example:
       `./script.sh get_logs`
 
 ## FINAL THOUGHTS
 
-	KEEP CALM AND VALIDATE ON ELROND NETWORK!
+   KEEP CALM AND VALIDATE ON ELROND NETWORK!
