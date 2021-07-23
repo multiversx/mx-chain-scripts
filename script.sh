@@ -18,9 +18,9 @@ if [ $# -eq 0 ]
 
   show_menu #Show all the menu options
 
-  COLUMNS=13
+  COLUMNS=14
   PS3="Please select an action:"
-  options=("install" "observing_squad" "upgrade" "upgrade_squad" "upgrade_proxy" "remove_db" "start" "stop" "cleanup" "github_pull" "add_nodes" "get_logs" "quit")
+  options=("install" "observing_squad" "upgrade" "upgrade_squad" "upgrade_proxy" "remove_db" "start" "stop" "cleanup" "github_pull" "add_nodes" "get_logs" "benchmark" "quit")
 
   select opt in "${options[@]}"
   do
@@ -130,6 +130,14 @@ if [ $# -eq 0 ]
     show_menu
     ;;
 
+  'benchmark')
+    run_benchmark
+    echo -e
+    read -n 1 -s -r -p "  Process finished. Press any key to continue..."
+    clear
+    show_menu
+    ;;
+
   'quit')
     echo -e
     echo -e "${GREEN}---> Exiting scripts menu...${NC}"
@@ -198,7 +206,12 @@ case "$1" in
 'get_logs')
   get_logs
   ;;
-  
+
+'benchmark')
+  run_benchmark
+  ;;
+
+
 esac
 
 fi
