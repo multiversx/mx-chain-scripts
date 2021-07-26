@@ -211,7 +211,6 @@ case "$1" in
   run_benchmark
   ;;
 
-
 esac
 
 fi
