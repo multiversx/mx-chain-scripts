@@ -55,7 +55,7 @@ Example of adding your validator keys to a zip file (node-0.zip):
         #installs the node(s) on the local machine
         ./script.sh install 
 
-        Running the script with the 'install' parameter will prompt for each machine the following:
+        Running the script with the 'install' parameter will prompt for the following:
             - number of nodes to be ran on the machine
             - validator display name for each node (this will only be asked one time)
 
@@ -70,7 +70,7 @@ Example of adding your validator keys to a zip file (node-0.zip):
         #upgrades the node(s) on the local machine
         ./script.sh upgrade - when running just nodes
 
-        ./script.sh upgrade_squad - when running the observing squad configuratio
+        ./script.sh upgrade_squad - when running the observing squad configuration
 
         ./script.sh upgrade_proxy - whenever you need to update the Elrond Proxy instance (in the observing squad configuration)
 
@@ -105,12 +105,8 @@ Example of adding your validator keys to a zip file (node-0.zip):
 
     [BENCHMARK]
         #runs the performance assessment tool and creates a CSV containing the results.
-        #Caution: The benchmark process should be conducted with all nodes turned off as the results will be negatively affected by a running node
+        #Caution: The benchmark process should be conducted with all nodes stopped as the results will be negatively affected by a running node
         ./script.sh benchmark 
-
-    [VERSION]
-        #Outputs the current version of the scripts
-        ./script.sh version 
 
 ## TERMUI NODE INFO
 
