@@ -8,7 +8,6 @@ source $SCRIPTPATH/config/variables.cfg
 source $SCRIPTPATH/config/functions.cfg
 source $SCRIPTPATH/config/menu_functions.cfg
 
-
 #Check if there are newer versions of the scripts available
 check_scripts_version
 
@@ -209,6 +208,10 @@ case "$1" in
 
 'benchmark')
   run_benchmark
+  ;;
+
+'migrate')
+  migrate_scripts
   ;;
 
 esac
