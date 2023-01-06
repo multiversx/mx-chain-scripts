@@ -4,7 +4,7 @@
 
 The current scripts version aims to bring the validator experience to a higher standard.
 This variant of the scripts can be used on any of the MultiversX Networks (mainnet,testnet or devnet) by setting the new `ENVIRONMENT` variable.
-The `ENVIRONMENT` variable will direct the scripts to use the correct mx-chain-configs repositories (mx-chain-mainnet|testnet|devnet-config).
+The `ENVIRONMENT` variable will direct the scripts to use the correct mx-chain-configs repositories (mx-chain-mainnet-config, mx-chain-testnet-config, or mx-chain-devnet-config).
 Running an observers plus proxy stack is also supported on all MultiversX Networks.
 Following a few simple steps, you can run your node(s) on the local machine.
 Each node will run in background as a separate systemd unit.
