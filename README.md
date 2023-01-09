@@ -1,11 +1,11 @@
-# Elrond Node Deploy Scripts - Mainnet
+# MultiversX Node Deploy Scripts
 
 ## INTRODUCTION
 
 The current scripts version aims to bring the validator experience to a higher standard.
-This variant of the scripts can be used on any of the Elronds Networks (mainnet,testnet or devnet) by setting the new `ENVIRONMENT` variable.
-The `ENVIRONMENT` variable will direct the scripts to use the correct elrond-configs repositories (elrond-config-mainnet|testnet|devnet).
-Running an observers plus proxy stack is also supported on all Elrond Networks.
+This variant of the scripts can be used on any of the MultiversX Networks (mainnet,testnet or devnet) by setting the new `ENVIRONMENT` variable.
+The `ENVIRONMENT` variable will direct the scripts to use the correct mx-chain-configs repositories (mx-chain-mainnet-config, mx-chain-testnet-config, or mx-chain-devnet-config).
+Running an observing squad (4 nodes + proxy) is also supported on all MultiversX Networks.
 Following a few simple steps, you can run your node(s) on the local machine.
 Each node will run in background as a separate systemd unit.
 A new addition to the scripts is the performance assessment tool which you can use to benchmark your machine and ensure performance is adequate.
@@ -13,7 +13,7 @@ A new addition to the scripts is the performance assessment tool which you can u
 ## REQUIREMENTS
 
 - Running Ubuntu 18.04, 20.04 & up
-- Running the script requires a user (not root) with sudo priviledges (without password). Find more information here: <https://docs.elrond.com/validators/mainnet/config-scripts/#ensure-user-privileges>
+- Running the script requires a user (not root) with sudo priviledges (without password). Find more information here: <https://docs.multiversx.com/validators/nodes-scripts/config-scripts/#ensure-user-privileges>
 
 ## SCRIPT SETTINGS - MUST BE MODIFIED BEFORE FIRST RUN
 
@@ -63,7 +63,7 @@ Example of adding your validator keys to a zip file (node-0.zip):
         #installs four observing node(s) and an elrond proxy instance on the local machine
         ./script.sh observing_squad
 
-        Running the script with the 'observing_squad' parameter will deploy four observers (one for each shard) plus an instance of the Elrond Proxy
+        Running the script with the 'observing_squad' parameter will deploy four observers (one for each shard) plus an instance of the MultiversX Proxy
             - please make sure your machine is able to comfortably run in such a configuration 
 
     [UPGRADE]
@@ -72,7 +72,7 @@ Example of adding your validator keys to a zip file (node-0.zip):
 
         ./script.sh upgrade_squad - when running the observing squad configuration
 
-        ./script.sh upgrade_proxy - whenever you need to update the Elrond Proxy instance (in the observing squad configuration)
+        ./script.sh upgrade_proxy - whenever you need to update the MultiversX Proxy instance (in the observing squad configuration)
 
     [START]
         #starts the node(s) on the local machine
@@ -188,4 +188,4 @@ As of version 1.3.4 of the scripts there is a new command for extracting and tar
 
 ## FINAL THOUGHTS
 
-   KEEP CALM AND VALIDATE ON ELROND NETWORK!
+   KEEP CALM AND VALIDATE ON THE MULTIVERSX NETWORK!
