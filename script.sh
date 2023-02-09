@@ -5,7 +5,6 @@ set -e
 SCRIPTPATH="$( cd -- "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 ; pwd -P )"
 
 source $SCRIPTPATH/config/variables.cfg
-source $SCRIPTPATH/config/auto_nodes_config.cfg
 source $SCRIPTPATH/config/functions.cfg
 source $SCRIPTPATH/config/menu_functions.cfg
 
