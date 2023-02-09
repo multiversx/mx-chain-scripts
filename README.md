@@ -17,7 +17,7 @@ A new addition to the scripts is the performance assessment tool which you can u
 
 ## SCRIPT SETTINGS - MUST BE MODIFIED BEFORE FIRST RUN
 
-- config/variables.cfg - used to define the environment, username, home path, validator keys location, Github OAUTH Token, extra node parameters.
+- config/variables.cfg - used to define the environment, username, home path, validator keys location, Github OAUTH Token, extra node parameters. You will also find the possibility to activate the automatic configuration of your nodes (Name & Redundancy).
 In this file, it is very important to set the `ENVIRONMENT`, `CUSTOM_HOME` and `CUSTOM_USER` variables. Whoever wants to use the keybase identity, should provide here the `IDENTITY` value as it will be written automatically by the upgrade script each time an upgrade occurs.
 Additionally we strongly encourage you to generate your own Github OAUTH Token and add it to the `GITHUBTOKEN` variable inside the config/variables.cfg file
 
