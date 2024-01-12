@@ -17,9 +17,9 @@ if [ $# -eq 0 ]
 
   show_menu #Show all the menu options
 
-  COLUMNS=16
+  COLUMNS=18
   PS3="Please select an action:"
-  options=("install" "observing_squad" "multikey_squad" "upgrade" "upgrade_multikey" "upgrade_squad" "upgrade_proxy" "remove_db" "start" "stop" "cleanup" "github_pull" "add_nodes" "get_logs" "benchmark" "quit")
+  options=("install" "observing_squad" "multikey_squad" "upgrade" "upgrade_multikey" "upgrade_squad" "upgrade_proxy" "remove_db" "start" "start_all" "stop" "stop_all" "cleanup" "github_pull" "add_nodes" "get_logs" "benchmark" "quit")
 
   select opt in "${options[@]}"
   do
@@ -65,7 +65,7 @@ if [ $# -eq 0 ]
     show_menu
     ;;
 
-  'upgrade_squad')
+'upgrade_multikey')
     upgrade_squad
     echo -e
     read -n 1 -s -r -p "  Process finished. Press any key to continue..."
@@ -73,7 +73,7 @@ if [ $# -eq 0 ]
     show_menu
     ;;
 
-  'upgrade_multikey')
+  'upgrade_squad')
     upgrade_squad
     echo -e
     read -n 1 -s -r -p "  Process finished. Press any key to continue..."
@@ -105,8 +105,24 @@ if [ $# -eq 0 ]
     show_menu
     ;;
 
+  'start_all')
+    start_all
+    echo -e
+    read -n 1 -s -r -p "  Process finished. Press any key to continue..."
+    clear
+    show_menu
+    ;;
+
   'stop')
     stop
+    echo -e
+    read -n 1 -s -r -p "  Process finished. Press any key to continue..."
+    clear
+    show_menu
+    ;;
+
+  'stop_all')
+    stop_all
     echo -e
     read -n 1 -s -r -p "  Process finished. Press any key to continue..."
     clear
@@ -190,11 +206,11 @@ case "$1" in
     fi
   ;;
 
-'upgrade_squad')
+'upgrade_multikey')
   upgrade_squad
   ;;
 
-'upgrade_multikey')
+'upgrade_squad')
   upgrade_squad
   ;;
 
@@ -210,8 +226,16 @@ case "$1" in
   start
   ;;
 
+'start_all')
+  start_all
+  ;;
+
 'stop')
   stop
+  ;;
+
+'stop_all')
+  stop_all
   ;;
 
 'cleanup')
