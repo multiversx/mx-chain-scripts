@@ -58,7 +58,14 @@ Example of adding your validator keys to a zip file (node-0.zip):
         Running the script with the 'install' parameter will prompt for the following:
             - number of nodes to be ran on the machine
             - validator display name for each node (this will only be asked one time)
+    
+    [INSTALL MULTIKEY SQUAD]    
+        #installs four observing nodes on the local machine
+        ./script.sh multikey_squad
 
+        Running the script with the 'multikey_squad' parameter will deploy four observers (one for each shard)
+            - please make sure your machine is able to comfortably run in such a configuration
+    
     [INSTALL OBSERVING SQUAD]    
         #installs four observing node(s) and an elrond proxy instance on the local machine
         ./script.sh observing_squad
@@ -70,7 +77,9 @@ Example of adding your validator keys to a zip file (node-0.zip):
         #upgrades the node(s) on the local machine
         ./script.sh upgrade - when running just nodes
 
-        ./script.sh upgrade_squad - when running the observing squad configuration
+        ./script.sh upgrade_squad - when running with the observing squad configuration
+
+        ./script.sh upgrade_multikey - when running with the multikey squad configuration        
 
         ./script.sh upgrade_proxy - whenever you need to update the MultiversX Proxy instance (in the observing squad configuration)
 
@@ -78,9 +87,17 @@ Example of adding your validator keys to a zip file (node-0.zip):
         #starts the node(s) on the local machine
         ./script.sh start - allows you to either start all the nodes or select which ones to start (comma separated node ids) 
 
+    [START_ALL]
+        #starts the node(s) on the local machine
+        ./script.sh start_all - allows you to quickly start all the nodes
+
     [STOP]
         #stops the node(s) on the local machine
         ./script.sh stop  - allows you to either stop all the nodes or select which ones to stop (comma separated node ids)
+
+    [STOP_ALL]
+        #stops the node(s) on the local machine
+        ./script.sh stop_all  - allows you to quickly stop all the nodes
 
     [ADD NODES]
         #allow users to add more nodes in addition to the ones already running on the local machine
