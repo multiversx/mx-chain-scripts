@@ -17,9 +17,9 @@ if [ $# -eq 0 ]
 
   show_menu #Show all the menu options
 
-  COLUMNS=14
+  COLUMNS=16
   PS3="Please select an action:"
-  options=("install" "observing_squad" "upgrade" "upgrade_squad" "upgrade_proxy" "remove_db" "start" "stop" "cleanup" "github_pull" "add_nodes" "get_logs" "benchmark" "quit")
+  options=("install" "observing_squad" "multikey_squad" "upgrade" "upgrade_multikey" "upgrade_squad" "upgrade_proxy" "remove_db" "start" "stop" "cleanup" "github_pull" "add_nodes" "get_logs" "benchmark" "quit")
 
   select opt in "${options[@]}"
   do
@@ -42,6 +42,14 @@ if [ $# -eq 0 ]
     show_menu
     ;;
 
+  'multikey_squad')
+    multikey
+    echo -e
+    read -n 1 -s -r -p "  Process finished. Press any key to continue..."
+    clear
+    show_menu
+    ;;
+
   'upgrade')
     #Check if running observing squad
     if [ -e /etc/systemd/system/elrond-proxy.service ]; then 
@@ -58,6 +66,14 @@ if [ $# -eq 0 ]
     ;;
 
   'upgrade_squad')
+    upgrade_squad
+    echo -e
+    read -n 1 -s -r -p "  Process finished. Press any key to continue..."
+    clear
+    show_menu
+    ;;
+
+  'upgrade_multikey')
     upgrade_squad
     echo -e
     read -n 1 -s -r -p "  Process finished. Press any key to continue..."
@@ -159,6 +175,10 @@ case "$1" in
   observers
   ;;
 
+'multikey_squad')
+  multikey
+  ;;
+
 'upgrade')
   #Check if running observing squad
   if [ -e /etc/systemd/system/elrond-proxy.service ]; then 
@@ -171,6 +191,10 @@ case "$1" in
   ;;
 
 'upgrade_squad')
+  upgrade_squad
+  ;;
+
+'upgrade_multikey')
   upgrade_squad
   ;;
 
