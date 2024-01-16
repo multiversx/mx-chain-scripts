@@ -59,11 +59,11 @@ Example of adding your validator keys to a zip file (node-0.zip):
             - number of nodes to be ran on the machine
             - validator display name for each node (this will only be asked one time)
     
-    [INSTALL MULTIKEY SQUAD]    
+    [INSTALL MULTIKEY GROUP]    
         #installs four observing nodes on the local machine
-        ./script.sh multikey_squad
+        ./script.sh multikey_group
 
-        Running the script with the 'multikey_squad' parameter will deploy four observers (one for each shard)
+        Running the script with the 'multikey_group' parameter will deploy four observers (one for each shard)
             - please make sure your machine is able to comfortably run in such a configuration
     
     [INSTALL OBSERVING SQUAD]    

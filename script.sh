@@ -19,7 +19,7 @@ if [ $# -eq 0 ]
 
   COLUMNS=18
   PS3="Please select an action:"
-  options=("install" "observing_squad" "multikey_squad" "upgrade" "upgrade_multikey" "upgrade_squad" "upgrade_proxy" "remove_db" "start" "start_all" "stop" "stop_all" "cleanup" "github_pull" "add_nodes" "get_logs" "benchmark" "quit")
+  options=("install" "observing_squad" "multikey_group" "upgrade" "upgrade_multikey" "upgrade_squad" "upgrade_proxy" "remove_db" "start" "start_all" "stop" "stop_all" "cleanup" "github_pull" "add_nodes" "get_logs" "benchmark" "quit")
 
   select opt in "${options[@]}"
   do
@@ -42,7 +42,7 @@ if [ $# -eq 0 ]
     show_menu
     ;;
 
-  'multikey_squad')
+  'multikey_group')
     multikey
     echo -e
     read -n 1 -s -r -p "  Process finished. Press any key to continue..."
@@ -192,7 +192,7 @@ case "$1" in
   observers
   ;;
 
-'multikey_squad')
+'multikey_group')
   multikey
   ;;
 
