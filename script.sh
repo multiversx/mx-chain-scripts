@@ -17,9 +17,9 @@ if [ $# -eq 0 ]
 
   show_menu #Show all the menu options
 
-  COLUMNS=14
+  COLUMNS=18
   PS3="Please select an action:"
-  options=("install" "observing_squad" "upgrade" "upgrade_squad" "upgrade_proxy" "remove_db" "start" "stop" "cleanup" "github_pull" "add_nodes" "get_logs" "benchmark" "quit")
+  options=("install" "observing_squad" "multikey_group" "upgrade" "upgrade_multikey" "upgrade_squad" "upgrade_proxy" "remove_db" "start" "start_all" "stop" "stop_all" "cleanup" "github_pull" "add_nodes" "get_logs" "benchmark" "quit")
 
   select opt in "${options[@]}"
   do
@@ -42,15 +42,32 @@ if [ $# -eq 0 ]
     show_menu
     ;;
 
+  'multikey_group')
+    multikey
+    echo -e
+    read -n 1 -s -r -p "  Process finished. Press any key to continue..."
+    clear
+    show_menu
+    ;;
+
   'upgrade')
-    #Check if running observing squad
-    if [ -e /etc/systemd/system/elrond-proxy.service ]; then 
-                    echo -e "${RED}--> You are running in the OBSERVING SQUAD configuration. Redirecting to the ${CYAN}upgrade_squad${RED} option instead.${NC}"
+    #Check if running a squad
+    if [ -e $CUSTOM_HOME/.squad_install ]; then 
+                    SQUAD_VER=$(cat $CUSTOM_HOME/.squad_install)
+                    echo -e "${RED}--> You are running in the ${CYAN}$SQUAD_VER${RED} configuration. Redirecting to the ${CYAN}upgrade_squad${RED} option instead.${NC}"
                     echo -e
                     upgrade_squad                
                 else
                   upgrade    
         fi
+    echo -e
+    read -n 1 -s -r -p "  Process finished. Press any key to continue..."
+    clear
+    show_menu
+    ;;
+
+'upgrade_multikey')
+    upgrade_squad
     echo -e
     read -n 1 -s -r -p "  Process finished. Press any key to continue..."
     clear
@@ -89,8 +106,24 @@ if [ $# -eq 0 ]
     show_menu
     ;;
 
+  'start_all')
+    start_all
+    echo -e
+    read -n 1 -s -r -p "  Process finished. Press any key to continue..."
+    clear
+    show_menu
+    ;;
+
   'stop')
     stop
+    echo -e
+    read -n 1 -s -r -p "  Process finished. Press any key to continue..."
+    clear
+    show_menu
+    ;;
+
+  'stop_all')
+    stop_all
     echo -e
     read -n 1 -s -r -p "  Process finished. Press any key to continue..."
     clear
@@ -159,15 +192,24 @@ case "$1" in
   observers
   ;;
 
+'multikey_group')
+  multikey
+  ;;
+
 'upgrade')
-  #Check if running observing squad
-  if [ -e /etc/systemd/system/elrond-proxy.service ]; then 
-                echo -e "${RED}--> You are running in the OBSERVING SQUAD configuration. Redirecting to the ${CYAN}upgrade_squad${RED} option instead.${NC}"
-                echo -e
-                upgrade_squad                
-          else
-            upgrade    
-    fi
+  ##Check if running a squad
+    if [ -e $CUSTOM_HOME/.squad_install ]; then 
+                    SQUAD_VER=$(cat $CUSTOM_HOME/.squad_install)
+                    echo -e "${RED}--> You are running in the ${CYAN}$SQUAD_VER${RED} configuration. Redirecting to the ${CYAN}upgrade_squad${RED} option instead.${NC}"
+                    echo -e
+                    upgrade_squad                
+                else
+                  upgrade    
+        fi
+  ;;
+
+'upgrade_multikey')
+  upgrade_squad
   ;;
 
 'upgrade_squad')
@@ -186,8 +228,16 @@ case "$1" in
   start
   ;;
 
+'start_all')
+  start_all
+  ;;
+
 'stop')
   stop
+  ;;
+
+'stop_all')
+  stop_all
   ;;
 
 'cleanup')
