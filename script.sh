@@ -53,8 +53,7 @@ if [ $# -eq 0 ]
   'upgrade')
     #Check if running a squad
     if [ -e $CUSTOM_HOME/.squad_install ]; then 
-                    SQUAD_VER=$(cat $CUSTOM_HOME/.squad_install)
-                    echo -e "${RED}--> You are running in the ${CYAN}$SQUAD_VER${RED} configuration. Redirecting to the ${CYAN}upgrade_squad${RED} option instead.${NC}"
+                    echo -e "${GREEN}--> Redirecting to the ${CYAN}upgrade_squad${GREEN} option.${NC}"
                     echo -e
                     upgrade_squad                
                 else
@@ -199,8 +198,7 @@ case "$1" in
 'upgrade')
   ##Check if running a squad
     if [ -e $CUSTOM_HOME/.squad_install ]; then 
-                    SQUAD_VER=$(cat $CUSTOM_HOME/.squad_install)
-                    echo -e "${RED}--> You are running in the ${CYAN}$SQUAD_VER${RED} configuration. Redirecting to the ${CYAN}upgrade_squad${RED} option instead.${NC}"
+                    echo -e "${GREEN}--> Redirecting to the ${CYAN}upgrade_squad${GREEN} option.${NC}"
                     echo -e
                     upgrade_squad                
                 else
