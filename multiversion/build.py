@@ -13,8 +13,7 @@ from rich import print
 from rich.panel import Panel
 from rich.rule import Rule
 
-from multiversion import errors, platform
-from multiversion.constants import FILE_MODE_EXECUTABLE
+from multiversion import errors
 
 
 class BuildConfigEntry:
@@ -111,7 +110,6 @@ def do_build(workspace: Path, entry: BuildConfigEntry):
         raise errors.KnownError(f"error code = {return_code}, see output")
 
     copy_wasmer_libs(go_mod, cmd_node)
-    set_rpath(cmd_node / "node")
 
 
 def locate_source_folder_in_archive_extraction_folder(extraction_folder: Path) -> Path:
@@ -144,39 +142,11 @@ def get_chain_vm_go_folder_name(go_mod: Path) -> str:
 
 
 def copy_libraries(source: Path, destination: Path):
-    libraries: List[Path] = list(source.glob("*.dylib")) + list(source.glob("*.so"))
+    libraries: List[Path] = list(source.glob("*.so"))
 
     for library in libraries:
         print(f"Copying {library} to {destination}")
         shutil.copy(library, destination)
-
-        # Seems to be necessary on MacOS (or, at least, was necessary in the past).
-        os.chmod(destination / library.name, FILE_MODE_EXECUTABLE)
-
-
-def set_rpath(cmd_path: Path):
-    """
-    Set the rpath of the executable to the current directory, on a best-effort basis.
-
-    For other occurrences of this approach, see:
-     - https://github.com/multiversx/mx-chain-scenario-cli-go/blob/master/.github/workflows/on_release_attach_artifacts.yml
-    """
-
-    if not platform.is_osx():
-        # We're only patching the executable on macOS.
-        # For Linux, we're leveraging LD_LIBRARY_PATH to resolve the libraries.
-        return
-
-    try:
-        subprocess.check_call([
-            "install_name_tool",
-            "-add_rpath",
-            "@loader_path",
-            cmd_path
-        ])
-    except Exception as e:
-        # In most cases, this isn't critical (libraries might be found among the downloaded Go packages).
-        print(f"Failed to set rpath of {cmd_path}: {e}")
 
 
 if __name__ == "__main__":

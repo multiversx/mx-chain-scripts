@@ -1,2 +1,4 @@
 #Don't track files:
 .DS_Store
+venv/
+__pycache__
