@@ -1,0 +1,22 @@
+[
+    {
+        "name": "sirius",
+        "sourceUrl": "https://github.com/multiversx/mx-chain-go/archive/refs/tags/v1.6.18.zip",
+        "destinationFolder": "~/binaries/sirius"
+    },
+    {
+        "name": "vega",
+        "sourceUrl": "https://github.com/multiversx/mx-chain-go/archive/refs/tags/v1.7.13-patch2.zip",
+        "destinationFolder": "~/binaries/vega"
+    },
+    {
+        "name": "spica",
+        "sourceUrl": "https://github.com/multiversx/mx-chain-go/archive/refs/tags/v1.8.12.zip",
+        "destinationFolder": "~/binaries/spica"
+    },
+    {
+        "name": "andromeda",
+        "sourceUrl": "https://github.com/multiversx/mx-chain-go/archive/refs/tags/v1.9.0.zip",
+        "destinationFolder": "~/binaries/andromeda"
+    }
+]
