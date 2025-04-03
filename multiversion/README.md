@@ -4,7 +4,9 @@ These scripts allow one to use multiple versions of the MultiversX node, in sequ
 
 **Important:** these scripts are only suitable for observers, not for validators. Furthermore, the MultiversX proxy isn't handled.
 
-## Building the binaries
+## Building the artifacts
+
+Skip this flow if you choose to download the pre-built Node artifacts, instead of building them.
 
 Go must be installed beforehand.
 
