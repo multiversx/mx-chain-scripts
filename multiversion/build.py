@@ -7,13 +7,14 @@ import traceback
 import urllib.request
 from argparse import ArgumentParser
 from pathlib import Path
-from typing import Any, List
+from typing import Any
 
 from rich import print
 from rich.panel import Panel
 from rich.rule import Rule
 
 from multiversion import errors
+from multiversion.constants import FILE_MODE_NICE
 
 
 class BuildConfigEntry:
@@ -66,13 +67,14 @@ def _do_main(cli_args: list[str]):
 
     for entry in config_entries:
         print(Rule(f"[bold yellow]{entry.name}"))
-        do_download(workspace_path, entry)
-        do_build(workspace_path, entry)
+        source_parent_folder = do_download(workspace_path, entry)
+        cmd_node_folder = do_build(source_parent_folder)
+        copy_artifacts(cmd_node_folder, entry)
 
 
-def do_download(workspace: Path, entry: BuildConfigEntry):
-    download_folder = workspace / "downloads" / entry.name
-    extraction_folder = get_extraction_folder(workspace, entry)
+def do_download(workspace: Path, entry: BuildConfigEntry) -> Path:
+    download_folder = workspace / entry.name
+    extraction_folder = workspace / entry.name
     url = entry.source_url
 
     print(f"Re-creating {download_folder} ...")
@@ -92,14 +94,14 @@ def do_download(workspace: Path, entry: BuildConfigEntry):
     print(f"Unpacking archive {download_path} to {extraction_folder}")
     shutil.unpack_archive(download_path, extraction_folder, format="zip")
 
-
-def get_extraction_folder(workspace: Path, entry: BuildConfigEntry):
-    return workspace / "builds" / entry.name
+    return extraction_folder
 
 
-def do_build(workspace: Path, entry: BuildConfigEntry):
-    extraction_folder = get_extraction_folder(workspace, entry)
-    source_folder = locate_source_folder_in_archive_extraction_folder(extraction_folder)
+def do_build(source_parent_folder: Path) -> Path:
+    # If has one subfolder, that one is the source code
+    subfolders = [Path(item.path) for item in os.scandir(source_parent_folder) if item.is_dir()]
+    source_folder = subfolders[0] if len(subfolders) == 1 else source_parent_folder
+
     cmd_node = source_folder / "cmd" / "node"
     go_mod = source_folder / "go.mod"
 
@@ -109,29 +111,20 @@ def do_build(workspace: Path, entry: BuildConfigEntry):
     if return_code != 0:
         raise errors.KnownError(f"error code = {return_code}, see output")
 
-    copy_wasmer_libs(go_mod, cmd_node)
+    copy_wasmer_libraries(go_mod, cmd_node)
+    return cmd_node
 
 
-def locate_source_folder_in_archive_extraction_folder(extraction_folder: Path) -> Path:
-    # If has one subfolder, that one is the source code
-    subfolders = list(extraction_folder.glob("*"))
-    source_folder = subfolders[0] if len(subfolders) == 1 else extraction_folder
-
-    # Heuristic to check if this is a valid source code folder
-    assert (source_folder / "go.mod").exists(), f"This is not a valid source code folder: {source_folder}"
-    return source_folder
-
-
-def copy_wasmer_libs(go_mod: Path, destination: Path):
+def copy_wasmer_libraries(go_mod: Path, destination: Path):
     go_path_variable = os.environ.get("GOPATH", "~/go")
     go_path = Path(go_path_variable).expanduser().resolve()
     vm_go_folder_name = get_chain_vm_go_folder_name(go_mod)
     vm_go_path = go_path / "pkg" / "mod" / vm_go_folder_name
-    wasmer_path = vm_go_path / "wasmer"
-    wasmer2_path = vm_go_path / "wasmer2"
+    libraries = list((vm_go_path / "wasmer").glob("*.so")) + list((vm_go_path / "wasmer2").glob("*.so"))
 
-    copy_libraries(wasmer_path, destination)
-    copy_libraries(wasmer2_path, destination)
+    for library in libraries:
+        shutil.copy(library, destination)
+        os.chmod(destination / library.name, FILE_MODE_NICE)
 
 
 def get_chain_vm_go_folder_name(go_mod: Path) -> str:
@@ -141,12 +134,19 @@ def get_chain_vm_go_folder_name(go_mod: Path) -> str:
     return f"{parts[0]}@{parts[1]}"
 
 
-def copy_libraries(source: Path, destination: Path):
-    libraries: List[Path] = list(source.glob("*.so"))
+def copy_artifacts(cmd_node_folder: Path, entry: BuildConfigEntry):
+    print(f"Copying artifacts to {entry.destination_folder} ...")
 
-    for library in libraries:
-        print(f"Copying {library} to {destination}")
-        shutil.copy(library, destination)
+    libraries = list(cmd_node_folder.glob("*.so"))
+    executable = cmd_node_folder / "node"
+    artifacts = libraries + [executable]
+
+    destination_folder = Path(entry.destination_folder).expanduser().resolve()
+    shutil.rmtree(destination_folder, ignore_errors=True)
+    destination_folder.mkdir(parents=True, exist_ok=True)
+
+    for artifact in artifacts:
+        shutil.copy(artifact, destination_folder)
 
 
 if __name__ == "__main__":
