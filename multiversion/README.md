@@ -4,6 +4,16 @@ These scripts allow one to use multiple versions of the MultiversX node, in sequ
 
 **Important:** these scripts are only suitable for observers, not for validators. Furthermore, the MultiversX proxy isn't handled.
 
+## Python virtual environment
+
+Create a virtual environment and install the dependencies:
+
+```
+python3 -m venv ./venv
+source ./venv/bin/activate
+pip install -r ./requirements.txt --upgrade
+```
+
 ## Building the artifacts
 
 Skip this flow if you choose to download the pre-built Node artifacts, instead of building them.
@@ -12,16 +22,4 @@ Go must be installed beforehand.
 
 ```
 PYTHONPATH=. python3 ./multiversion/build.py --workspace=~/mvx-workspace --config=./multiversion/build.json
-```
-
-## Maintenance
-
-### Python virtual environment
-
-Create a virtual environment and install the dependencies:
-
-```
-python3 -m venv ./venv
-source ./venv/bin/activate
-pip install -r ./requirements.txt --upgrade
 ```
