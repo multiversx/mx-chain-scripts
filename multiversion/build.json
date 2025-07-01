@@ -1,32 +1,32 @@
 [
     {
         "name": "sirius",
+        "goUrl": "https://golang.org/dl/go1.20.7.linux-amd64.tar.gz",
         "sourceUrl": "https://github.com/multiversx/mx-chain-go/archive/refs/tags/v1.6.18.zip",
-        "goTag": "go1.20.7",
         "destinationFolder": "~/mvx-binaries/sirius"
     },
     {
         "name": "vega",
+        "goUrl": "https://golang.org/dl/go1.20.7.linux-amd64.tar.gz",
         "sourceUrl": "https://github.com/multiversx/mx-chain-go/archive/refs/tags/v1.7.13-patch2.zip",
-        "goTag": "go1.20.7",
         "destinationFolder": "~/mvx-binaries/vega"
     },
     {
         "name": "spica",
+        "goUrl": "https://golang.org/dl/go1.20.7.linux-amd64.tar.gz",
         "sourceUrl": "https://github.com/multiversx/mx-chain-go/archive/refs/tags/v1.8.12.zip",
-        "goTag": "go1.20.7",
         "destinationFolder": "~/mvx-binaries/spica"
     },
     {
         "name": "andromeda",
+        "goUrl": "https://golang.org/dl/go1.20.7.linux-amd64.tar.gz",
         "sourceUrl": "https://github.com/multiversx/mx-chain-go/archive/refs/tags/v1.9.6.zip",
-        "goTag": "go1.20.7",
         "destinationFolder": "~/mvx-binaries/andromeda"
     },
     {
         "name": "barnard",
+        "goUrl": "https://golang.org/dl/go1.23.10.linux-amd64.tar.gz",
         "sourceUrl": "https://github.com/multiversx/mx-chain-go/archive/refs/tags/v1.10.0.zip",
-        "goTag": "go1.23.10",
         "destinationFolder": "~/mvx-binaries/barnard"
     }
 ]

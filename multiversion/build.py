@@ -1,7 +1,6 @@
 import json
 import os
 import shutil
-import subprocess
 import sys
 import traceback
 import urllib.request
@@ -13,31 +12,36 @@ from rich import print
 from rich.panel import Panel
 from rich.rule import Rule
 
-from multiversion import errors
+from multiversion import errors, golang
 from multiversion.constants import FILE_MODE_NICE
 
 
 class BuildConfigEntry:
-    def __init__(self, name: str, source_url: str, destination_folder: str) -> None:
+    def __init__(self, name: str, go_url: str, source_url: str, destination_folder: str) -> None:
         if not name:
             raise errors.KnownError("build 'name' is required")
+        if not go_url:
+            raise errors.KnownError("build 'go url' is required")
         if not source_url:
             raise errors.KnownError("build 'source' is required")
         if not destination_folder:
             raise errors.KnownError("build 'destination' is required")
 
         self.name = name
+        self.go_url = go_url
         self.source_url = source_url
         self.destination_folder = destination_folder
 
     @classmethod
     def new_from_dictionary(cls, data: dict[str, Any]):
         name = data.get("name") or ""
+        go_url = data.get("goUrl") or ""
         source_url = data.get("sourceUrl") or ""
         destination_folder = data.get("destinationFolder") or ""
 
         return cls(
             name=name,
+            go_url=go_url,
             source_url=source_url,
             destination_folder=destination_folder,
         )
@@ -66,9 +70,12 @@ def _do_main(cli_args: list[str]):
     config_entries = [BuildConfigEntry.new_from_dictionary(item) for item in config_data]
 
     for entry in config_entries:
+        golang.install_go(workspace_path, entry.go_url, environment_label=entry.name)
+        build_environment = golang.acquire_environment(workspace_path, label=entry.name)
+
         print(Rule(f"[bold yellow]{entry.name}"))
         source_parent_folder = do_download(workspace_path, entry)
-        cmd_node_folder = do_build(source_parent_folder)
+        cmd_node_folder = do_build(source_parent_folder, build_environment)
         copy_artifacts(cmd_node_folder, entry)
 
 
@@ -77,11 +84,9 @@ def do_download(workspace: Path, entry: BuildConfigEntry) -> Path:
     extraction_folder = workspace / entry.name
     url = entry.source_url
 
-    print(f"Re-creating {download_folder} ...")
     shutil.rmtree(download_folder, ignore_errors=True)
     download_folder.mkdir(parents=True, exist_ok=True)
 
-    print(f"Re-creating {extraction_folder} ...")
     shutil.rmtree(extraction_folder, ignore_errors=True)
     extraction_folder.mkdir(parents=True, exist_ok=True)
 
@@ -97,7 +102,7 @@ def do_download(workspace: Path, entry: BuildConfigEntry) -> Path:
     return extraction_folder
 
 
-def do_build(source_parent_folder: Path) -> Path:
+def do_build(source_parent_folder: Path, environment: golang.GoBuildEnvironment) -> Path:
     # If has one subfolder, that one is the source code
     subfolders = [Path(item.path) for item in os.scandir(source_parent_folder) if item.is_dir()]
     source_folder = subfolders[0] if len(subfolders) == 1 else source_parent_folder
@@ -105,25 +110,21 @@ def do_build(source_parent_folder: Path) -> Path:
     cmd_node = source_folder / "cmd" / "node"
     go_mod = source_folder / "go.mod"
 
-    print(f"Building {cmd_node} ...")
+    golang.build(cmd_node, environment)
+    copy_wasmer_libraries(environment, go_mod, cmd_node)
 
-    return_code = subprocess.check_call(["go", "build"], cwd=cmd_node)
-    if return_code != 0:
-        raise errors.KnownError(f"error code = {return_code}, see output")
-
-    copy_wasmer_libraries(go_mod, cmd_node)
     return cmd_node
 
 
-def copy_wasmer_libraries(go_mod: Path, destination: Path):
-    go_path_variable = os.environ.get("GOPATH", "~/go")
-    go_path = Path(go_path_variable).expanduser().resolve()
+def copy_wasmer_libraries(build_environment: golang.GoBuildEnvironment, go_mod: Path, destination: Path):
+    go_path = Path(build_environment.go_path).expanduser().resolve()
     vm_go_folder_name = get_chain_vm_go_folder_name(go_mod)
     vm_go_path = go_path / "pkg" / "mod" / vm_go_folder_name
     libraries = list((vm_go_path / "wasmer").glob("*.so")) + list((vm_go_path / "wasmer2").glob("*.so"))
 
     for library in libraries:
         shutil.copy(library, destination)
+
         os.chmod(destination / library.name, FILE_MODE_NICE)
 
 
