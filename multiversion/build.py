@@ -70,10 +70,11 @@ def _do_main(cli_args: list[str]):
     config_entries = [BuildConfigEntry.new_from_dictionary(item) for item in config_data]
 
     for entry in config_entries:
+        print(Rule(f"[bold yellow]{entry.name}"))
+
         golang.install_go(workspace_path, entry.go_url, environment_label=entry.name)
         build_environment = golang.acquire_environment(workspace_path, label=entry.name)
 
-        print(Rule(f"[bold yellow]{entry.name}"))
         source_parent_folder = do_download(workspace_path, entry)
         cmd_node_folder = do_build(source_parent_folder, build_environment)
         copy_artifacts(cmd_node_folder, entry)
