@@ -3,7 +3,7 @@
 from pathlib import Path
 from typing import Any
 
-from multiversion import errors
+from multistage import errors
 
 
 class BuildConfigEntry:
@@ -38,29 +38,29 @@ class BuildConfigEntry:
 
 
 class DriverConfig:
-    def __init__(self, shards: list[int], phases: list["DriverPhaseConfig"]) -> None:
+    def __init__(self, shards: list[int], stages: list["StageConfig"]) -> None:
         if not shards:
             raise errors.BadConfigurationError("'shards' are required")
-        if not phases:
-            raise errors.BadConfigurationError("'phases' are required")
+        if not stages:
+            raise errors.BadConfigurationError("'stages' are required")
 
         self.shards = shards
-        self.phases = phases
+        self.stages = stages
 
     @classmethod
     def new_from_dictionary(cls, data: dict[str, Any]):
         shards = data.get("shards") or []
-        phases = data.get("phases") or []
+        stages = data.get("stages") or []
 
         return cls(
             shards=shards,
-            phases=phases,
+            stages=stages,
         )
 
 
-class DriverPhaseConfig:
+class StageConfig:
     def __init__(self,
-                 phase: str,
+                 name: str,
                  version: str,
                  until_epoch: int,
                  configuration_archive: str,
@@ -68,8 +68,8 @@ class DriverPhaseConfig:
                  node_arguments: list[str],
                  with_db_lookup_extensions: bool,
                  with_indexing: bool) -> None:
-        if not phase:
-            raise errors.BadConfigurationError("'phase' is required")
+        if not name:
+            raise errors.BadConfigurationError("'name' is required")
         if not version:
             raise errors.BadConfigurationError("'version' is required")
         if not until_epoch:
@@ -79,7 +79,7 @@ class DriverPhaseConfig:
         if not bin:
             raise errors.BadConfigurationError("'bin' is required")
 
-        self.phase = phase
+        self.name = name
         self.version = version
         self.until_epoch = until_epoch
         self.configuration_archive = configuration_archive
@@ -90,7 +90,7 @@ class DriverPhaseConfig:
 
     @classmethod
     def new_from_dictionary(cls, data: dict[str, Any]):
-        phase = data.get("phase") or ""
+        name = data.get("name") or ""
         version = data.get("version") or ""
         until_epoch = data.get("untilEpoch") or 0
         configuration_archive = data.get("configurationArchive") or ""
@@ -100,7 +100,7 @@ class DriverPhaseConfig:
         with_indexing = data.get("withIndexing") or False
 
         return cls(
-            phase=phase,
+            name=name,
             version=version,
             until_epoch=until_epoch,
             configuration_archive=configuration_archive,

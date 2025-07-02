@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 
 from rich import print
 
-from multiversion import errors
+from multistage import errors
 
 
 class BuildEnvironment:

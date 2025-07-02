@@ -12,9 +12,9 @@ from rich import print
 from rich.panel import Panel
 from rich.rule import Rule
 
-from multiversion import errors, golang
-from multiversion.config import BuildConfigEntry
-from multiversion.constants import FILE_MODE_NICE
+from multistage import errors, golang
+from multistage.config import BuildConfigEntry
+from multistage.constants import FILE_MODE_NICE
 
 
 def main(cli_args: list[str] = sys.argv[1:]):

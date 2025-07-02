@@ -1,0 +1,16 @@
+{
+    "shards": [0, 1, 2, 4294967295],
+    "nodesRootPath": "~/mvx-nodes",
+    "stages": [
+        {
+            "name": "1st (Sirius)",
+            "version": "Sirius",
+            "untilEpoch": 42,
+            "configurationArchive": "https://github.com/multiversx/mx-chain-mainnet-config/releases/tag/v1.6.18.0.zip",
+            "bin": "~/mvx-binaries/sirius",
+            "nodeArguments": ["--log-save", "--log-level", "*:DEBUG"],
+            "withDbLookupExtensions": true,
+            "withIndexing": false
+        }
+    ]
+}

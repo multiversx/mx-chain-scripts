@@ -18,8 +18,12 @@ pip install -r ./requirements.txt --upgrade
 
 Skip this flow if you choose to download the pre-built Node artifacts, instead of building them.
 
-Go must be installed beforehand.
+```
+PYTHONPATH=. python3 ./multistage/build.py --workspace=~/mvx-workspace --config=./multistage/build.json
+```
+
+## Set up an observer (or a squad)
 
 ```
-PYTHONPATH=. python3 ./multiversion/build.py --workspace=~/mvx-workspace --config=./multiversion/build.json
+PYTHONPATH=. python3 ./multistage/driver.py --config=./multistage/driver.testnet.json
 ```
