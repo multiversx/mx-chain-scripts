@@ -13,38 +13,8 @@ from rich.panel import Panel
 from rich.rule import Rule
 
 from multiversion import errors, golang
+from multiversion.config import BuildConfigEntry
 from multiversion.constants import FILE_MODE_NICE
-
-
-class BuildConfigEntry:
-    def __init__(self, name: str, go_url: str, source_url: str, destination_folder: str) -> None:
-        if not name:
-            raise errors.KnownError("build 'name' is required")
-        if not go_url:
-            raise errors.KnownError("build 'go url' is required")
-        if not source_url:
-            raise errors.KnownError("build 'source' is required")
-        if not destination_folder:
-            raise errors.KnownError("build 'destination' is required")
-
-        self.name = name
-        self.go_url = go_url
-        self.source_url = source_url
-        self.destination_folder = destination_folder
-
-    @classmethod
-    def new_from_dictionary(cls, data: dict[str, Any]):
-        name = data.get("name") or ""
-        go_url = data.get("goUrl") or ""
-        source_url = data.get("sourceUrl") or ""
-        destination_folder = data.get("destinationFolder") or ""
-
-        return cls(
-            name=name,
-            go_url=go_url,
-            source_url=source_url,
-            destination_folder=destination_folder,
-        )
 
 
 def main(cli_args: list[str] = sys.argv[1:]):
