@@ -1,16 +1,55 @@
 {
-    "shards": [0, 1, 2, 4294967295],
-    "nodesRootPath": "~/mvx-nodes",
-    "stages": [
+    "lanes": [
         {
-            "name": "1st (Sirius)",
-            "version": "Sirius",
-            "untilEpoch": 42,
-            "configurationArchive": "https://github.com/multiversx/mx-chain-mainnet-config/releases/tag/v1.6.18.0.zip",
-            "bin": "~/mvx-binaries/sirius",
-            "nodeArguments": ["--log-save", "--log-level", "*:DEBUG"],
-            "withDbLookupExtensions": true,
-            "withIndexing": false
+            "name": "Shard 0",
+            "workingDirectory": "~/mvx-nodes/shard-0",
+            "stages": [
+                {
+                    "name": "Spica",
+                    "untilEpoch": 201,
+                    "nodeStatusUrl": "http://localhost:8080/node/status",
+                    "configurationArchive": "https://github.com/multiversx/mx-chain-testnet-config/releases/tag/T1.8.12.1.zip",
+                    "bin": "~/mvx-binaries/spica",
+                    "nodeArguments": [
+                        "--log-save",
+                        "--log-level=*:DEBUG",
+                        "--destination-shard-as-observer=0",
+                        "--rest-api-interface=8080"
+                    ],
+                    "withDbLookupExtensions": true,
+                    "withIndexing": false
+                },
+                {
+                    "name": "Andromeda",
+                    "untilEpoch": 767,
+                    "nodeStatusUrl": "http://localhost:8080/node/status",
+                    "configurationArchive": "https://github.com/multiversx/mx-chain-testnet-config/releases/tag/T1.9.6.0.zip",
+                    "bin": "~/mvx-binaries/andromeda",
+                    "nodeArguments": [
+                        "--log-save",
+                        "--log-level=*:DEBUG",
+                        "--destination-shard-as-observer=0",
+                        "--rest-api-interface=8080"
+                    ],
+                    "withDbLookupExtensions": true,
+                    "withIndexing": false
+                },
+                {
+                    "name": "Barnard",
+                    "untilEpoch": 4294967295,
+                    "nodeStatusUrl": "http://localhost:8080/node/status",
+                    "configurationArchive": "https://github.com/multiversx/mx-chain-testnet-config/releases/tag/T1.10.1.0.zip",
+                    "bin": "~/mvx-binaries/barnard",
+                    "nodeArguments": [
+                        "--log-save",
+                        "--log-level=*:DEBUG",
+                        "--destination-shard-as-observer=0",
+                        "--rest-api-interface=8080"
+                    ],
+                    "withDbLookupExtensions": true,
+                    "withIndexing": false
+                }
+            ]
         }
     ]
 }

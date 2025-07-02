@@ -38,31 +38,33 @@ class BuildConfigEntry:
 
 
 class DriverConfig:
-    def __init__(self, shards: list[int], stages: list["StageConfig"]) -> None:
-        if not shards:
-            raise errors.BadConfigurationError("'shards' are required")
-        if not stages:
-            raise errors.BadConfigurationError("'stages' are required")
+    def __init__(self, lanes: list["LaneConfig"]) -> None:
+        if not lanes:
+            raise errors.BadConfigurationError("'lanes' are required")
 
-        self.shards = shards
-        self.stages = stages
+        self.lanes = lanes
 
     @classmethod
     def new_from_dictionary(cls, data: dict[str, Any]):
-        shards = data.get("shards") or []
-        stages = data.get("stages") or []
+        lanes = data.get("lanes") or []
 
         return cls(
-            shards=shards,
-            stages=stages,
+            lanes=lanes,
         )
+
+
+class LaneConfig:
+    def __init__(self, name: str, working_directory: str, stages: list["StageConfig"]) -> None:
+        self.name = name
+        self.working_directory = working_directory
+        self.stages = stages
 
 
 class StageConfig:
     def __init__(self,
                  name: str,
-                 version: str,
                  until_epoch: int,
+                 node_status_url: str,
                  configuration_archive: str,
                  bin: str,
                  node_arguments: list[str],
@@ -70,17 +72,16 @@ class StageConfig:
                  with_indexing: bool) -> None:
         if not name:
             raise errors.BadConfigurationError("'name' is required")
-        if not version:
-            raise errors.BadConfigurationError("'version' is required")
         if not until_epoch:
-            raise errors.BadConfigurationError("'until_epoch' is required")
+            raise errors.BadConfigurationError("'until epoch' is required")
+        if not node_status_url:
+            raise errors.BadConfigurationError("'node status url' is required")
         if not configuration_archive:
-            raise errors.BadConfigurationError("'configuration_archive' is required")
+            raise errors.BadConfigurationError("'configuration archive' is required")
         if not bin:
             raise errors.BadConfigurationError("'bin' is required")
 
         self.name = name
-        self.version = version
         self.until_epoch = until_epoch
         self.configuration_archive = configuration_archive
         self.bin = Path(bin).expanduser().resolve()
@@ -91,8 +92,8 @@ class StageConfig:
     @classmethod
     def new_from_dictionary(cls, data: dict[str, Any]):
         name = data.get("name") or ""
-        version = data.get("version") or ""
         until_epoch = data.get("untilEpoch") or 0
+        node_status_url = data.get("nodeStatusUrl") or ""
         configuration_archive = data.get("configurationArchive") or ""
         bin = data.get("bin") or ""
         node_arguments = data.get("nodeArguments") or []
@@ -101,8 +102,8 @@ class StageConfig:
 
         return cls(
             name=name,
-            version=version,
             until_epoch=until_epoch,
+            node_status_url=node_status_url,
             configuration_archive=configuration_archive,
             bin=bin,
             node_arguments=node_arguments,

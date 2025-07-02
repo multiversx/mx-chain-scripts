@@ -31,8 +31,11 @@ def _do_main(cli_args: list[str]):
     config_data = json.loads(config_path.read_text())
     driver_config = DriverConfig.new_from_dictionary(config_data)
 
-    for stage in driver_config.stages:
-        print(Rule(f"[bold yellow]{stage.name}"))
+    for lane in driver_config.lanes:
+        print(Rule(f"[bold yellow]{lane.name}"))
+
+        for stage in lane.stages:
+            print(Rule(f"[bold yellow]{stage.name}"))
 
 
 if __name__ == "__main__":
