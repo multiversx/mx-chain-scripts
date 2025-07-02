@@ -73,7 +73,7 @@ def do_download(workspace: Path, entry: BuildConfigEntry) -> Path:
     return extraction_folder
 
 
-def do_build(source_parent_folder: Path, environment: golang.GoBuildEnvironment) -> Path:
+def do_build(source_parent_folder: Path, environment: golang.BuildEnvironment) -> Path:
     # If has one subfolder, that one is the source code
     subfolders = [Path(item.path) for item in os.scandir(source_parent_folder) if item.is_dir()]
     source_folder = subfolders[0] if len(subfolders) == 1 else source_parent_folder
@@ -87,7 +87,7 @@ def do_build(source_parent_folder: Path, environment: golang.GoBuildEnvironment)
     return cmd_node
 
 
-def copy_wasmer_libraries(build_environment: golang.GoBuildEnvironment, go_mod: Path, destination: Path):
+def copy_wasmer_libraries(build_environment: golang.BuildEnvironment, go_mod: Path, destination: Path):
     go_path = Path(build_environment.go_path).expanduser().resolve()
     vm_go_folder_name = get_chain_vm_go_folder_name(go_mod)
     vm_go_path = go_path / "pkg" / "mod" / vm_go_folder_name

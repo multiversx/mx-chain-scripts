@@ -10,7 +10,7 @@ from rich import print
 from multiversion import errors
 
 
-class GoBuildEnvironment:
+class BuildEnvironment:
     def __init__(self, system_path: str, go_path: str, go_cache: str, go_root: str) -> None:
         self.system_path = system_path
         self.go_path = go_path
@@ -26,11 +26,11 @@ class GoBuildEnvironment:
         }
 
 
-def acquire_environment(workspace: Path, label: str) -> GoBuildEnvironment:
+def acquire_environment(workspace: Path, label: str) -> BuildEnvironment:
     directory = get_environment_directory(workspace, label)
     current_system_path = os.environ.get("PATH", "")
 
-    return GoBuildEnvironment(
+    return BuildEnvironment(
         system_path=f"{directory / 'go' / 'bin'}:{current_system_path}",
         go_path=str(directory / "gopath"),
         go_cache=str(directory / "gocache"),
@@ -64,7 +64,7 @@ def install_go(workspace: Path, download_url: str, environment_label: str):
     (environment_directory / "gocache").mkdir()
 
 
-def build(source_code: Path, environment: GoBuildEnvironment):
+def build(source_code: Path, environment: BuildEnvironment):
     print(f"Building {source_code} ...")
 
     return_code = subprocess.check_call(["go", "build"], cwd=source_code, env=environment.to_dictionary())
