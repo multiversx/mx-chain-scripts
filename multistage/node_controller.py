@@ -12,6 +12,7 @@ from multistage.constants import NODE_PROCESS_ULIMIT
 class NodeController:
     def __init__(self) -> None:
         self.process: Optional[Process] = None
+        self.return_code = -1
 
     async def start(self, program: str, args: list[str], cwd: Path):
         print(f"Starting node ...")
@@ -33,9 +34,14 @@ class NodeController:
         print(f"Proces [{self.process.pid}] stopped. Return code: {return_code}.")
 
         self.process = None
+        self.return_code = return_code
 
     def stop(self):
         assert self.process is not None
 
         print("Stopping node ...")
         self.process.kill()
+        self.process = None
+
+    def is_running(self) -> bool:
+        return self.process is not None

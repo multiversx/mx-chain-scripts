@@ -99,6 +99,11 @@ class LaneConfig:
     def get_stages_names(self) -> list[str]:
         return [stage.name for stage in self.stages]
 
+    def get_stages_including_and_after(self, initial_stage_name: str) -> list["StageConfig"]:
+        stages_names = self.get_stages_names()
+        index_of_initial_stage_name = stages_names.index(initial_stage_name)
+        return self.stages[index_of_initial_stage_name:]
+
 
 class StageConfig:
     def __init__(self,
@@ -123,6 +128,7 @@ class StageConfig:
 
         self.name = name
         self.until_epoch = until_epoch
+        self.node_status_url = node_status_url
         self.configuration_archive = configuration_archive
         self.bin = Path(bin).expanduser().resolve()
         self.node_arguments = node_arguments

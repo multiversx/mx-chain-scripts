@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Any, Coroutine, Optional
 
 from rich import print
+from rich.rule import Rule
 
 from multistage.config import LaneConfig, StageConfig
 from multistage.node_controller import NodeController
@@ -12,7 +13,8 @@ from multistage.node_controller import NodeController
 class ProcessingLane:
     def __init__(self, config: LaneConfig, initial_stage_name: str) -> None:
         self.config = config
-        self.current_stage_index = 0
+        self.initial_stage_name = initial_stage_name
+        self.current_stage: Optional[StageConfig] = None
         self.current_node_controller: Optional[NodeController] = None
 
     def start(self):
@@ -25,18 +27,30 @@ class ProcessingLane:
             print("Processing lane interrupted.")
 
     async def _do_start(self):
-        node_controller = NodeController()
+        stages = self.config.get_stages_including_and_after(self.initial_stage_name)
 
-        coroutines: list[Coroutine[Any, Any, None]] = [
-            node_controller.start("tbd", [], Path("")),
-            self.monitor_node()
-        ]
+        for stage in stages:
+            print(Rule(f"[bold yellow]{stage.name}"))
 
-        tasks = [asyncio.create_task(item) for item in coroutines]
-        await asyncio.gather(*tasks, return_exceptions=False)
+            self.current_stage = stage
+            self.current_node_controller = NodeController()
+
+            coroutines: list[Coroutine[Any, Any, None]] = [
+                # TBD: change this, start node.
+                self.current_node_controller.start("ls", [], Path("")),
+                self.monitor_node()
+            ]
+
+            tasks = [asyncio.create_task(item) for item in coroutines]
+            await asyncio.gather(*tasks, return_exceptions=False)
 
     async def monitor_node(self):
-        loop = asyncio.get_running_loop()
+        assert self.current_stage is not None
+
+        print("Node status URL:", self.current_stage.node_status_url)
 
         while True:
-            await asyncio.sleep(1000)
+            await asyncio.sleep(1)
+
+            if self.current_node_controller and not self.current_node_controller.is_running():
+                return
