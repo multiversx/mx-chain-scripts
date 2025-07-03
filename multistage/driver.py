@@ -35,20 +35,21 @@ def _do_main(cli_args: list[str]):
     config_data = json.loads(config_path.read_text())
     driver_config = DriverConfig.new_from_dictionary(config_data)
     lane_name = args.lane
-    stage_name = args.stage
+    initial_stage_name = args.stage
 
     if lane_name not in driver_config.get_lanes_names():
         raise errors.BadConfigurationError(f"unknown lane: {lane_name}")
 
     lane_config = driver_config.get_lane(lane_name)
 
-    if stage_name not in lane_config.get_stages_names():
-        raise errors.BadConfigurationError(f"unknown stage: {stage_name}")
+    if initial_stage_name not in lane_config.get_stages_names():
+        raise errors.BadConfigurationError(f"unknown stage: {initial_stage_name}")
 
     print(f"[bold yellow]Lane: {lane_name}")
-    print(f"[bold yellow]Initial stage: {stage_name}")
+    print(f"[bold yellow]Initial stage: {initial_stage_name}")
 
-    lane = ProcessingLane(lane_config)
+    lane = ProcessingLane(lane_config, initial_stage_name)
+    lane.start()
 
 
 if __name__ == "__main__":

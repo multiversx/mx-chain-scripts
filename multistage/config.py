@@ -39,8 +39,12 @@ class BuildConfigEntry:
 
 class DriverConfig:
     def __init__(self, lanes: list["LaneConfig"]) -> None:
+        lanes_names = [lane.name for lane in lanes]
+
         if not lanes:
             raise errors.BadConfigurationError("'lanes' are required")
+        if len(lanes_names) > len(set(lanes_names)):
+            raise errors.BadConfigurationError("lanes names must be unique")
 
         self.lanes = lanes
         self.lanes_by_name = {lane.name: lane for lane in lanes}
@@ -63,12 +67,16 @@ class DriverConfig:
 
 class LaneConfig:
     def __init__(self, name: str, working_directory: str, stages: list["StageConfig"]) -> None:
+        stages_names = [stage.name for stage in stages]
+
         if not name:
             raise errors.BadConfigurationError("for all lanes, 'name' is required")
         if not working_directory:
             raise errors.BadConfigurationError(f"for lane {name}, 'working directory' is required")
         if not stages:
             raise errors.BadConfigurationError(f"for lane {name}, 'stages' are required")
+        if len(stages) > len(set(stages)):
+            raise errors.BadConfigurationError("stages names must be unique")
 
         self.name = name
         self.working_directory = working_directory
