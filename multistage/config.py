@@ -43,21 +43,53 @@ class DriverConfig:
             raise errors.BadConfigurationError("'lanes' are required")
 
         self.lanes = lanes
+        self.lanes_by_name = {lane.name: lane for lane in lanes}
 
     @classmethod
     def new_from_dictionary(cls, data: dict[str, Any]):
-        lanes = data.get("lanes") or []
+        lanes_records = data.get("lanes") or []
+        lanes = [LaneConfig.new_from_dictionary(record) for record in lanes_records]
 
         return cls(
             lanes=lanes,
         )
 
+    def get_lanes_names(self) -> list[str]:
+        return [lane.name for lane in self.lanes]
+
+    def get_lane(self, name: str) -> "LaneConfig":
+        return self.lanes_by_name[name]
+
 
 class LaneConfig:
     def __init__(self, name: str, working_directory: str, stages: list["StageConfig"]) -> None:
+        if not name:
+            raise errors.BadConfigurationError("for all lanes, 'name' is required")
+        if not working_directory:
+            raise errors.BadConfigurationError(f"for lane {name}, 'working directory' is required")
+        if not stages:
+            raise errors.BadConfigurationError(f"for lane {name}, 'stages' are required")
+
         self.name = name
         self.working_directory = working_directory
         self.stages = stages
+        self.stages_by_name = {stage.name: stage for stage in stages}
+
+    @classmethod
+    def new_from_dictionary(cls, data: dict[str, Any]):
+        name = data.get("name") or ""
+        working_directory = data.get("workingDirectory") or ""
+        stages_records = data.get("stages") or []
+        stages = [StageConfig.new_from_dictionary(record) for record in stages_records]
+
+        return cls(
+            name=name,
+            working_directory=working_directory,
+            stages=stages,
+        )
+
+    def get_stages_names(self) -> list[str]:
+        return [stage.name for stage in self.stages]
 
 
 class StageConfig:
@@ -71,15 +103,15 @@ class StageConfig:
                  with_db_lookup_extensions: bool,
                  with_indexing: bool) -> None:
         if not name:
-            raise errors.BadConfigurationError("'name' is required")
+            raise errors.BadConfigurationError("for all stages, 'name' is required")
         if not until_epoch:
-            raise errors.BadConfigurationError("'until epoch' is required")
+            raise errors.BadConfigurationError(f"for stage {name}, 'until epoch' is required")
         if not node_status_url:
-            raise errors.BadConfigurationError("'node status url' is required")
+            raise errors.BadConfigurationError(f"for stage {name}, 'node status url' is required")
         if not configuration_archive:
-            raise errors.BadConfigurationError("'configuration archive' is required")
+            raise errors.BadConfigurationError(f"for stage {name}, 'configuration archive' is required")
         if not bin:
-            raise errors.BadConfigurationError("'bin' is required")
+            raise errors.BadConfigurationError(f"for stage {name}, 'bin' is required")
 
         self.name = name
         self.until_epoch = until_epoch

@@ -1,11 +1,11 @@
 {
     "lanes": [
         {
-            "name": "Shard 0",
+            "name": "shard_0",
             "workingDirectory": "~/mvx-nodes/shard-0",
             "stages": [
                 {
-                    "name": "Spica",
+                    "name": "spica",
                     "untilEpoch": 201,
                     "nodeStatusUrl": "http://localhost:8080/node/status",
                     "configurationArchive": "https://github.com/multiversx/mx-chain-testnet-config/releases/tag/T1.8.12.1.zip",
@@ -20,7 +20,7 @@
                     "withIndexing": false
                 },
                 {
-                    "name": "Andromeda",
+                    "name": "andromeda",
                     "untilEpoch": 767,
                     "nodeStatusUrl": "http://localhost:8080/node/status",
                     "configurationArchive": "https://github.com/multiversx/mx-chain-testnet-config/releases/tag/T1.9.6.0.zip",
@@ -35,7 +35,7 @@
                     "withIndexing": false
                 },
                 {
-                    "name": "Barnard",
+                    "name": "barnard",
                     "untilEpoch": 4294967295,
                     "nodeStatusUrl": "http://localhost:8080/node/status",
                     "configurationArchive": "https://github.com/multiversx/mx-chain-testnet-config/releases/tag/T1.10.1.0.zip",

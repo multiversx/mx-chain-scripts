@@ -1,39 +1,40 @@
 import asyncio
 import os
 from pathlib import Path
-from typing import Any, Coroutine
+from typing import Any, Coroutine, Optional
 
-from multistage.config import StageConfig
+from multistage.config import LaneConfig, StageConfig
+from multistage.node_controller import NodeController
 
 
 class ProcessingLane:
-    def __init__(self, shard: int, stages: list[StageConfig]) -> None:
-        self.shard = shard
-        self.stages = stages
+    def __init__(self, config: LaneConfig) -> None:
+        self.config = config
+        self.current_stage_index = 0
+        self.current_node_controller: Optional[NodeController] = None
 
+    def start(self):
+        try:
+            loop = asyncio.get_event_loop()
+            loop.run_until_complete(self._do_start())
+            loop.close()
+            asyncio.set_event_loop(asyncio.new_event_loop())
+        except KeyboardInterrupt:
+            print("Processing lange interrupted.")
 
-def start():
-    try:
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(do_start())
-        loop.close()
-        asyncio.set_event_loop(asyncio.new_event_loop())
-    except KeyboardInterrupt:
-        pass
+    async def _do_start(self):
+        # get
 
+        coroutines: list[Coroutine[Any, Any, None]] = [
+            run(
+                args=["TBD", "TBD"],
+                cwd=Path("."),
+            ),
+            monitor_network()
+        ]
 
-async def do_start():
-    coroutines: list[Coroutine[Any, Any, None]] = [
-        run(
-            ["TBD", "TBD"],
-            cwd=Path("."),
-            delay=1000,
-        ),
-        monitor_network()
-    ]
-
-    tasks = [asyncio.create_task(item) for item in coroutines]
-    await asyncio.gather(*tasks)
+        tasks = [asyncio.create_task(item) for item in coroutines]
+        await asyncio.gather(*tasks)
 
 
 async def monitor_network():
@@ -43,9 +44,7 @@ async def monitor_network():
         await asyncio.sleep(1000)
 
 
-async def run(args: list[str], cwd: Path, delay: int = 0):
-    await asyncio.sleep(delay)
-
+async def run(args: list[str], cwd: Path):
     print(f"Starting process {args} in folder {cwd}")
 
     env = os.environ.copy()

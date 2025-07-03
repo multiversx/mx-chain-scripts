@@ -25,5 +25,5 @@ PYTHONPATH=. python3 ./multistage/build.py --workspace=~/mvx-workspace --config=
 ## Set up an observer (or a squad)
 
 ```
-PYTHONPATH=. python3 ./multistage/driver.py --config=./multistage/driver.testnet.json
+PYTHONPATH=. python3 ./multistage/driver.py --config=./multistage/driver.testnet.json --lane=shard_0 --stage=spica
 ```
