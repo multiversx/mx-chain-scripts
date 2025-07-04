@@ -62,7 +62,6 @@ class StageController:
 
     def should_stop(self) -> bool:
         epoch = self.get_current_epoch()
-        print(f"Epoch: {epoch}")
         return epoch > self.config.until_epoch
 
     def get_current_epoch(self) -> int:
@@ -77,9 +76,9 @@ class StageController:
             data = response.json().get("data", {})
             metrics = data.get("metrics", {})
             epoch = int(metrics.get("erd_epoch_number", 0))
-            nonce = int(metrics.get("erd_nonce", 0))
+            block_nonce = int(metrics.get("erd_nonce", 0))
 
-            print(epoch, nonce)
+            print(f"Epoch = {epoch}, block = {block_nonce}")
 
             return epoch
         except Exception as error:
