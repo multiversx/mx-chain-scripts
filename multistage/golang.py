@@ -57,6 +57,6 @@ def install_go(workspace: Path, download_url: str, environment_label: str):
 def build(source_code: Path, environment: BuildEnvironment):
     print(f"Building {source_code} ...")
 
-    return_code = subprocess.check_call(["go", "build"], cwd=source_code, env=environment.to_dictionary())
+    return_code = subprocess.call(["go", "build"], cwd=source_code, env=environment.to_dictionary())
     if return_code != 0:
         raise errors.KnownError(f"error code = {return_code}, see output")
