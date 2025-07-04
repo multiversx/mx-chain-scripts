@@ -14,7 +14,7 @@
                     "nodeArguments": [
                         "--log-save",
                         "--log-level=*:DEBUG",
-                        "--rest-api-interface=8080"
+                        "--rest-api-interface=localhost:8080"
                     ],
                     "withDbLookupExtensions": true,
                     "withIndexing": false
@@ -29,7 +29,7 @@
                     "nodeArguments": [
                         "--log-save",
                         "--log-level=*:DEBUG",
-                        "--rest-api-interface=8080"
+                        "--rest-api-interface=localhost:8080"
                     ]
                 }
             ]
