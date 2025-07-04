@@ -24,10 +24,7 @@ class StageController:
         config_directory = working_directory / "config"
         shutil.rmtree(config_directory, ignore_errors=True)
         fetch_archive(self.config.configuration_archive, config_directory)
-
-        # "withDbLookupExtensions": true,
-        # "withIndexing": false
-        pass
+        shutil.copy(self.config.prefs, config_directory / "prefs.toml")
 
     async def start(self, working_directory: Path):
         program = self.config.bin / "node"
@@ -66,13 +63,18 @@ class StageController:
 
     def get_current_epoch(self) -> int:
         status_url = self.config.node_status_url
-        response = requests.get(status_url)
 
-        if response.status_code != HTTPStatus.OK:
+        try:
+            response = requests.get(status_url)
+
+            if response.status_code != HTTPStatus.OK:
+                return 0
+
+            data = response.json().get("data", {})
+            metrics = data.get("metrics", {})
+            epoch = int(metrics.get("erd_epoch_number", 0))
+
+            return epoch
+        except Exception as error:
+            print(f"[red]Error:[/red] {error}")
             return 0
-
-        data = response.json().get("data", {})
-        metrics = data.get("metrics", {})
-        epoch = int(metrics.get("erd_epoch_number", 0))
-
-        return epoch
