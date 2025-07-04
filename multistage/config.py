@@ -79,7 +79,7 @@ class LaneConfig:
             raise errors.BadConfigurationError("stages names must be unique")
 
         self.name = name
-        self.working_directory = working_directory
+        self.working_directory = Path(working_directory).expanduser().resolve()
         self.stages = stages
         self.stages_by_name = {stage.name: stage for stage in stages}
 

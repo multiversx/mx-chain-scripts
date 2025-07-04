@@ -12,7 +12,7 @@ from rich.rule import Rule
 
 from multistage import errors
 from multistage.config import DriverConfig
-from multistage.processing_lane import ProcessingLane
+from multistage.lane_controller import LaneController
 
 
 def main(cli_args: list[str] = sys.argv[1:]):
@@ -48,7 +48,7 @@ def _do_main(cli_args: list[str]):
     print(f"[bold yellow]Lane: {lane_name}")
     print(f"[bold yellow]Initial stage: {initial_stage_name}")
 
-    lane = ProcessingLane(lane_config, initial_stage_name)
+    lane = LaneController(lane_config, initial_stage_name)
     lane.start()
 
 

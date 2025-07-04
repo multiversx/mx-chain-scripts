@@ -1,16 +1,16 @@
 import asyncio
-import os
-from pathlib import Path
 from typing import Any, Coroutine, Optional
 
 from rich import print
 from rich.rule import Rule
 
 from multistage.config import LaneConfig, StageConfig
+from multistage.constants import (NODE_MONITORING_PERIOD,
+                                  NODE_RETURN_CODE_SUCCESS)
 from multistage.node_controller import NodeController
 
 
-class ProcessingLane:
+class LaneController:
     def __init__(self, config: LaneConfig, initial_stage_name: str) -> None:
         self.config = config
         self.initial_stage_name = initial_stage_name
@@ -35,22 +35,32 @@ class ProcessingLane:
             self.current_stage = stage
             self.current_node_controller = NodeController()
 
+            node_program = str(stage.bin / "node")
+            node_arguments = stage.node_arguments
+            cwd = self.config.working_directory
+
+            cwd.mkdir(parents=True, exist_ok=True)
+
             coroutines: list[Coroutine[Any, Any, None]] = [
-                # TBD: change this, start node.
-                self.current_node_controller.start("ls", [], Path("")),
+                self.current_node_controller.start(node_program, node_arguments, cwd),
                 self.monitor_node()
             ]
 
             tasks = [asyncio.create_task(item) for item in coroutines]
             await asyncio.gather(*tasks, return_exceptions=False)
 
+            return_code = self.current_node_controller.return_code
+            if return_code != NODE_RETURN_CODE_SUCCESS:
+                break
+
     async def monitor_node(self):
         assert self.current_stage is not None
+        assert self.current_node_controller is not None
 
         print("Node status URL:", self.current_stage.node_status_url)
 
         while True:
-            await asyncio.sleep(1)
+            await asyncio.sleep(NODE_MONITORING_PERIOD)
 
-            if self.current_node_controller and not self.current_node_controller.is_running():
+            if not self.current_node_controller.is_running():
                 return
