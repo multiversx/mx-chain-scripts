@@ -1,13 +1,11 @@
 import os
-import shutil
 import subprocess
-import urllib.request
 from pathlib import Path
-from urllib.parse import urlparse
 
 from rich import print
 
 from multistage import errors
+from multistage.shared import fetch_archive
 
 
 class BuildEnvironment:
@@ -31,10 +29,10 @@ def acquire_environment(workspace: Path, label: str) -> BuildEnvironment:
     current_system_path = os.environ.get("PATH", "")
 
     return BuildEnvironment(
-        system_path=f"{directory / 'go' / 'bin'}:{current_system_path}",
+        system_path=f"{directory / 'bin'}:{current_system_path}",
         go_path=str(directory / "gopath"),
         go_cache=str(directory / "gocache"),
-        go_root=str(directory / "go"),
+        go_root=str(directory),
     )
 
 
@@ -43,21 +41,13 @@ def get_environment_directory(workspace: Path, label: str) -> Path:
 
 
 def install_go(workspace: Path, download_url: str, environment_label: str):
-    download_url_parsed = urlparse(download_url)
-    download_url_path = download_url_parsed.path
-    download_to_path = workspace / Path(download_url_path).name
     environment_directory = get_environment_directory(workspace, environment_label)
 
     if environment_directory.exists():
         print(f"Go already installed in {environment_directory} ({environment_label}).")
         return
 
-    print(f"Downloading {download_url} to {download_to_path} ...")
-    urllib.request.urlretrieve(download_url, download_to_path)
-
-    print(f"Extracting {environment_directory} ...")
-    shutil.rmtree(environment_directory, ignore_errors=True)
-    shutil.unpack_archive(download_to_path, environment_directory)
+    fetch_archive(download_url, environment_directory)
 
     print(f"Creating go environment directories ...")
     (environment_directory / "gopath").mkdir()

@@ -3,7 +3,6 @@ import os
 import shutil
 import sys
 import traceback
-import urllib.request
 from argparse import ArgumentParser
 from pathlib import Path
 from typing import Any
@@ -15,6 +14,7 @@ from rich.rule import Rule
 from multistage import errors, golang
 from multistage.config import BuildConfigEntry
 from multistage.constants import FILE_MODE_NICE
+from multistage.shared import fetch_archive
 
 
 def main(cli_args: list[str] = sys.argv[1:]):
@@ -51,25 +51,10 @@ def _do_main(cli_args: list[str]):
 
 
 def do_download(workspace: Path, entry: BuildConfigEntry) -> Path:
-    download_folder = workspace / entry.name
-    extraction_folder = workspace / entry.name
     url = entry.source_url
+    extraction_folder = workspace / entry.name
 
-    shutil.rmtree(download_folder, ignore_errors=True)
-    download_folder.mkdir(parents=True, exist_ok=True)
-
-    shutil.rmtree(extraction_folder, ignore_errors=True)
-    extraction_folder.mkdir(parents=True, exist_ok=True)
-
-    archive_extension = url.split(".")[-1]
-    download_path = download_folder / f"source.{archive_extension}"
-
-    print(f"Downloading archive {url} to {download_path}")
-    urllib.request.urlretrieve(url, download_path)
-
-    print(f"Unpacking archive {download_path} to {extraction_folder}")
-    shutil.unpack_archive(download_path, extraction_folder, format="zip")
-
+    fetch_archive(url, extraction_folder)
     return extraction_folder
 
 

@@ -2,6 +2,7 @@ import shutil
 import tempfile
 import urllib.request
 from pathlib import Path
+from urllib.parse import urlparse
 
 from rich import print
 
@@ -9,9 +10,11 @@ from multistage.constants import TEMPORARY_DIRECTORIES_PREFIX
 
 
 def fetch_archive(archive_url: str, destination_path: Path):
+    archive_url_parsed = urlparse(archive_url)
+    file_name = Path(archive_url_parsed.path).name
+
     with tempfile.TemporaryDirectory(prefix=TEMPORARY_DIRECTORIES_PREFIX) as tmpdirname:
-        archive_extension = archive_url.split(".")[-1]
-        download_path = Path(tmpdirname) / f"archive.{archive_extension}"
+        download_path = Path(tmpdirname) / file_name
         extraction_path = Path(tmpdirname) / "extracted"
 
         print(f"Downloading archive {archive_url} to {download_path} ...")

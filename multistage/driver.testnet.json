@@ -8,7 +8,7 @@
                     "name": "spica",
                     "untilEpoch": 201,
                     "nodeStatusUrl": "http://localhost:8080/node/status",
-                    "configurationArchive": "https://github.com/multiversx/mx-chain-testnet-config/releases/tag/T1.8.12.1.zip",
+                    "configurationArchive": "https://github.com/multiversx/mx-chain-testnet-config/archive/refs/tags/T1.8.12.0.zip",
                     "bin": "~/mvx-binaries/spica",
                     "nodeArguments": [
                         "--log-save",
@@ -23,7 +23,7 @@
                     "name": "andromeda",
                     "untilEpoch": 767,
                     "nodeStatusUrl": "http://localhost:8080/node/status",
-                    "configurationArchive": "https://github.com/multiversx/mx-chain-testnet-config/releases/tag/T1.9.6.0.zip",
+                    "configurationArchive": "https://github.com/multiversx/mx-chain-testnet-config/archive/refs/tags/T1.9.6.0.zip",
                     "bin": "~/mvx-binaries/andromeda",
                     "nodeArguments": [
                         "--log-save",
@@ -38,7 +38,7 @@
                     "name": "barnard",
                     "untilEpoch": 4294967295,
                     "nodeStatusUrl": "http://localhost:8080/node/status",
-                    "configurationArchive": "https://github.com/multiversx/mx-chain-testnet-config/releases/tag/T1.10.1.0.zip",
+                    "configurationArchive": "https://github.com/multiversx/mx-chain-testnet-config/archive/refs/tags/T1.10.1.0.zip",
                     "bin": "~/mvx-binaries/barnard",
                     "nodeArguments": [
                         "--log-save",
