@@ -6,6 +6,7 @@ from rich.rule import Rule
 
 from multistage.config import LaneConfig
 from multistage.constants import (NODE_MONITORING_PERIOD,
+                                  NODE_RETURN_CODE_SIGKILL,
                                   NODE_RETURN_CODE_SUCCESS)
 from multistage.stage_controller import StageController
 
@@ -40,25 +41,30 @@ class LaneController:
 
             coroutines: list[Coroutine[Any, Any, None]] = [
                 self.current_stage_controller.start(working_directory),
-                self.monitor_node()
+                self.monitor_stage()
             ]
 
             tasks = [asyncio.create_task(item) for item in coroutines]
             await asyncio.gather(*tasks, return_exceptions=False)
 
             return_code = self.current_stage_controller.return_code
+
+            if return_code == NODE_RETURN_CODE_SIGKILL:
+                continue
             if return_code != NODE_RETURN_CODE_SUCCESS:
                 break
 
-    async def monitor_node(self):
-        assert self.current_stage_controller is not None
+    async def monitor_stage(self):
+        controller = self.current_stage_controller
+
+        assert controller is not None
 
         while True:
             await asyncio.sleep(NODE_MONITORING_PERIOD)
 
-            if not self.current_stage_controller.is_running():
+            if not controller.is_running():
                 return
 
-            epoch = self.current_stage_controller.get_current_epoch()
-
-            print("monitor_node()", epoch)
+            if controller.should_stop():
+                controller.stop()
+                return

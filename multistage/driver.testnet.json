@@ -6,7 +6,7 @@
             "stages": [
                 {
                     "name": "andromeda",
-                    "untilEpoch": 767,
+                    "untilEpoch": 4,
                     "nodeStatusUrl": "http://localhost:8080/node/status",
                     "configurationArchive": "https://github.com/multiversx/mx-chain-testnet-config/archive/refs/tags/T1.9.6.0.zip",
                     "prefs": "~/mvx-workspace/_prefs_/andromeda_0.toml",
@@ -15,9 +15,7 @@
                         "--log-save",
                         "--log-level=*:DEBUG",
                         "--rest-api-interface=localhost:8080"
-                    ],
-                    "withDbLookupExtensions": true,
-                    "withIndexing": false
+                    ]
                 },
                 {
                     "name": "barnard",

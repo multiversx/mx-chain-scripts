@@ -4,6 +4,7 @@ METACHAIN_ID = 4294967295
 NODE_PROCESS_ULIMIT = 1024 * 512
 NODE_MONITORING_PERIOD = 5
 NODE_RETURN_CODE_SUCCESS = 0
+NODE_RETURN_CODE_SIGKILL = -9
 TEMPORARY_DIRECTORIES_PREFIX = "mx_chain_scripts_multistage_"
 
 # Read, write and execute by owner, read and execute by group and others

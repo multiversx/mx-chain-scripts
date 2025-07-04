@@ -46,7 +46,7 @@ class StageController:
         )
 
         return_code = await self.process.wait()
-        print(f"Node [{self.process.pid}] stopped, with return code = {return_code}. See node's logs.")
+        print(f"Node stopped, with return code = {return_code}. See node's logs.")
 
         self.process = None
         self.return_code = return_code
@@ -60,6 +60,11 @@ class StageController:
 
     def is_running(self) -> bool:
         return self.process is not None
+
+    def should_stop(self) -> bool:
+        epoch = self.get_current_epoch()
+        print(f"Epoch: {epoch}")
+        return epoch > self.config.until_epoch
 
     def get_current_epoch(self) -> int:
         status_url = self.config.node_status_url
