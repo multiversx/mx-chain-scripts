@@ -2,9 +2,11 @@ import asyncio
 import os
 import shutil
 from asyncio.subprocess import Process
+from http import HTTPStatus
 from pathlib import Path
 from typing import Optional
 
+import requests
 from rich import print
 
 from multistage.config import StageConfig
@@ -63,4 +65,14 @@ class StageController:
         return self.process is not None
 
     def get_current_epoch(self) -> int:
-        return 42
+        status_url = self.config.node_status_url
+        response = requests.get(status_url)
+
+        if response.status_code != HTTPStatus.OK:
+            return 0
+
+        data = response.json().get("data", {})
+        metrics = data.get("metrics", {})
+        epoch = int(metrics.get("erd_epoch_number", 0))
+
+        return epoch
