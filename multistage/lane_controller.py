@@ -4,18 +4,17 @@ from typing import Any, Coroutine, Optional
 from rich import print
 from rich.rule import Rule
 
-from multistage.config import LaneConfig, StageConfig
+from multistage.config import LaneConfig
 from multistage.constants import (NODE_MONITORING_PERIOD,
                                   NODE_RETURN_CODE_SUCCESS)
-from multistage.node_controller import NodeController
+from multistage.stage_controller import StageController
 
 
 class LaneController:
     def __init__(self, config: LaneConfig, initial_stage_name: str) -> None:
         self.config = config
         self.initial_stage_name = initial_stage_name
-        self.current_stage: Optional[StageConfig] = None
-        self.current_node_controller: Optional[NodeController] = None
+        self.current_stage_controller: Optional[StageController] = None
 
     def start(self):
         try:
@@ -32,35 +31,32 @@ class LaneController:
         for stage in stages:
             print(Rule(f"[bold yellow]{stage.name}"))
 
-            self.current_stage = stage
-            self.current_node_controller = NodeController()
+            self.current_stage_controller = StageController(stage)
 
-            node_program = str(stage.bin / "node")
-            node_arguments = stage.node_arguments
             cwd = self.config.working_directory
-
             cwd.mkdir(parents=True, exist_ok=True)
 
             coroutines: list[Coroutine[Any, Any, None]] = [
-                self.current_node_controller.start(node_program, node_arguments, cwd),
+                self.current_stage_controller.start(cwd),
                 self.monitor_node()
             ]
 
             tasks = [asyncio.create_task(item) for item in coroutines]
             await asyncio.gather(*tasks, return_exceptions=False)
 
-            return_code = self.current_node_controller.return_code
+            return_code = self.current_stage_controller.return_code
             if return_code != NODE_RETURN_CODE_SUCCESS:
                 break
 
     async def monitor_node(self):
-        assert self.current_stage is not None
-        assert self.current_node_controller is not None
-
-        print("Node status URL:", self.current_stage.node_status_url)
+        assert self.current_stage_controller is not None
 
         while True:
             await asyncio.sleep(NODE_MONITORING_PERIOD)
 
-            if not self.current_node_controller.is_running():
+            if not self.current_stage_controller.is_running():
                 return
+
+            epoch = self.current_stage_controller.get_current_epoch()
+
+            print("monitor_node()", epoch)

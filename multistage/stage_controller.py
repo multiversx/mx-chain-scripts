@@ -6,15 +6,26 @@ from typing import Optional
 
 from rich import print
 
+from multistage.config import StageConfig
 from multistage.constants import NODE_PROCESS_ULIMIT
 
 
-class NodeController:
-    def __init__(self) -> None:
+class StageController:
+    def __init__(self, config: StageConfig) -> None:
+        self.config = config
         self.process: Optional[Process] = None
         self.return_code = -1
 
-    async def start(self, program: str, args: list[str], cwd: Path):
+    def configure(self):
+        # configurationArchive
+        # "withDbLookupExtensions": true,
+        # "withIndexing": false
+        pass
+
+    async def start(self, cwd: Path):
+        program = self.config.bin / "node"
+        args = self.config.node_arguments
+
         print(f"Starting node ...")
         print("args:", args)
         print("cwd:", cwd)
@@ -45,3 +56,6 @@ class NodeController:
 
     def is_running(self) -> bool:
         return self.process is not None
+
+    def get_current_epoch(self) -> int:
+        return 42
