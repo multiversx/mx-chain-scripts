@@ -1,5 +1,6 @@
 import asyncio
 import os
+import shutil
 from asyncio.subprocess import Process
 from pathlib import Path
 from typing import Optional
@@ -8,6 +9,7 @@ from rich import print
 
 from multistage.config import StageConfig
 from multistage.constants import NODE_PROCESS_ULIMIT
+from multistage.shared import fetch_archive
 
 
 class StageController:
@@ -16,33 +18,36 @@ class StageController:
         self.process: Optional[Process] = None
         self.return_code = -1
 
-    def configure(self):
-        # configurationArchive
+    def configure(self, working_directory: Path):
+        config_directory = working_directory / "config"
+        shutil.rmtree(config_directory, ignore_errors=True)
+        fetch_archive(self.config.configuration_archive, config_directory)
+
         # "withDbLookupExtensions": true,
         # "withIndexing": false
         pass
 
-    async def start(self, cwd: Path):
+    async def start(self, working_directory: Path):
         program = self.config.bin / "node"
         args = self.config.node_arguments
 
-        print(f"Starting node ...")
-        print("args:", args)
-        print("cwd:", cwd)
+        print(f"Starting node in {working_directory} ...")
+        print(args)
 
         env = os.environ.copy()
-        env["LD_LIBRARY_PATH"] = str(cwd)
+        env["LD_LIBRARY_PATH"] = str(working_directory)
 
         self.process = await asyncio.create_subprocess_exec(
             program,
             *args,
-            cwd=cwd,
+            stdout=asyncio.subprocess.DEVNULL,
+            cwd=working_directory,
             limit=NODE_PROCESS_ULIMIT,
             env=env,
         )
 
         return_code = await self.process.wait()
-        print(f"Proces [{self.process.pid}] stopped. Return code: {return_code}.")
+        print(f"Node [{self.process.pid}] stopped, with return code = {return_code}. See node's logs.")
 
         self.process = None
         self.return_code = return_code

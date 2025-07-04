@@ -33,11 +33,13 @@ class LaneController:
 
             self.current_stage_controller = StageController(stage)
 
-            cwd = self.config.working_directory
-            cwd.mkdir(parents=True, exist_ok=True)
+            working_directory = self.config.working_directory
+            working_directory.mkdir(parents=True, exist_ok=True)
+
+            self.current_stage_controller.configure(working_directory)
 
             coroutines: list[Coroutine[Any, Any, None]] = [
-                self.current_stage_controller.start(cwd),
+                self.current_stage_controller.start(working_directory),
                 self.monitor_node()
             ]
 
