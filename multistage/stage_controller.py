@@ -24,7 +24,6 @@ class StageController:
         config_directory = working_directory / "config"
         shutil.rmtree(config_directory, ignore_errors=True)
         fetch_archive(self.config.configuration_archive, config_directory)
-        shutil.copy(self.config.prefs, config_directory / "prefs.toml")
 
     async def start(self, working_directory: Path):
         program = self.config.bin / "node"
@@ -78,6 +77,9 @@ class StageController:
             data = response.json().get("data", {})
             metrics = data.get("metrics", {})
             epoch = int(metrics.get("erd_epoch_number", 0))
+            nonce = int(metrics.get("erd_nonce", 0))
+
+            print(epoch, nonce)
 
             return epoch
         except Exception as error:

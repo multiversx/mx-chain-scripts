@@ -111,7 +111,6 @@ class StageConfig:
                  until_epoch: int,
                  node_status_url: str,
                  configuration_archive: str,
-                 prefs: str,
                  bin: str,
                  node_arguments: list[str],
                  with_db_lookup_extensions: bool,
@@ -124,8 +123,6 @@ class StageConfig:
             raise errors.BadConfigurationError(f"for stage {name}, 'node status url' is required")
         if not configuration_archive:
             raise errors.BadConfigurationError(f"for stage {name}, 'configuration archive' is required")
-        if not prefs:
-            raise errors.BadConfigurationError(f"for stage {name}, 'prefs' is required")
         if not bin:
             raise errors.BadConfigurationError(f"for stage {name}, 'bin' is required")
 
@@ -133,7 +130,6 @@ class StageConfig:
         self.until_epoch = until_epoch
         self.node_status_url = node_status_url
         self.configuration_archive = configuration_archive
-        self.prefs = Path(prefs).expanduser().resolve()
         self.bin = Path(bin).expanduser().resolve()
         self.node_arguments = node_arguments
         self.with_db_lookup_extensions = with_db_lookup_extensions
@@ -145,7 +141,6 @@ class StageConfig:
         until_epoch = data.get("untilEpoch") or 0
         node_status_url = data.get("nodeStatusUrl") or ""
         configuration_archive = data.get("configurationArchive") or ""
-        prefs = data.get("prefs") or ""
         bin = data.get("bin") or ""
         node_arguments = data.get("nodeArguments") or []
         with_db_lookup_extensions = data.get("withDbLookupExtensions") or False
@@ -156,7 +151,6 @@ class StageConfig:
             until_epoch=until_epoch,
             node_status_url=node_status_url,
             configuration_archive=configuration_archive,
-            prefs=prefs,
             bin=bin,
             node_arguments=node_arguments,
             with_db_lookup_extensions=with_db_lookup_extensions,

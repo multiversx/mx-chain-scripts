@@ -9,12 +9,13 @@
                     "untilEpoch": 4,
                     "nodeStatusUrl": "http://localhost:8080/node/status",
                     "configurationArchive": "https://github.com/multiversx/mx-chain-testnet-config/archive/refs/tags/T1.9.6.0.zip",
-                    "prefs": "~/mvx-workspace/_prefs_/andromeda_0.toml",
                     "bin": "~/mvx-binaries/andromeda",
                     "nodeArguments": [
                         "--log-save",
                         "--log-level=*:DEBUG",
-                        "--rest-api-interface=localhost:8080"
+                        "--rest-api-interface=localhost:8080",
+                        "--operation-mode=full-archive",
+                        "--destination-shard-as-observer=0"
                     ]
                 },
                 {
@@ -22,12 +23,13 @@
                     "untilEpoch": 4294967295,
                     "nodeStatusUrl": "http://localhost:8080/node/status",
                     "configurationArchive": "https://github.com/multiversx/mx-chain-testnet-config/archive/refs/tags/T1.10.1.0.zip",
-                    "prefs": "~/mvx-workspace/_prefs_/barnard_0.toml",
                     "bin": "~/mvx-binaries/barnard",
                     "nodeArguments": [
                         "--log-save",
                         "--log-level=*:DEBUG",
-                        "--rest-api-interface=localhost:8080"
+                        "--rest-api-interface=localhost:8080",
+                        "--operation-mode=full-archive",
+                        "--destination-shard-as-observer=0"
                     ]
                 }
             ]
