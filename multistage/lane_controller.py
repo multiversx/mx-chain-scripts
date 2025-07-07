@@ -19,10 +19,7 @@ class LaneController:
 
     def start(self):
         try:
-            loop = asyncio.get_event_loop()
-            loop.run_until_complete(self._do_start())
-            loop.close()
-            asyncio.set_event_loop(asyncio.new_event_loop())
+            asyncio.run(self._do_start())
         except KeyboardInterrupt:
             print("Processing lane interrupted.")
 

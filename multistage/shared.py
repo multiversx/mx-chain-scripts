@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 
 from rich import print
 
+from multistage import errors
 from multistage.constants import TEMPORARY_DIRECTORIES_PREFIX
 
 
@@ -24,7 +25,9 @@ def fetch_archive(archive_url: str, destination_path: Path):
         shutil.unpack_archive(download_path, extraction_path)
 
         items = list(extraction_path.glob("*"))
-        assert len(items) == 1, "archive should have contained only one top-level item"
+        if len(items) != 1:
+            raise errors.KnownError(f"archive {archive_url} should have contained only one top-level item")
+
         top_level_item = items[0]
 
         print(f"Moving {top_level_item} to {destination_path} ...")
