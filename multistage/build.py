@@ -86,8 +86,13 @@ def copy_wasmer_libraries(build_environment: golang.BuildEnvironment, go_mod: Pa
 
 def get_chain_vm_go_folder_name(go_mod: Path) -> str:
     lines = go_mod.read_text().splitlines()
-    line = [line for line in lines if "github.com/multiversx/mx-chain-vm-go" in line][0]
-    parts = line.split()
+
+    matching_lines = [line for line in lines if "github.com/multiversx/mx-chain-vm-go" in line]
+    if not matching_lines:
+        raise errors.KnownError("cannot detect location of mx-chain-vm-go")
+
+    line_of_interest = matching_lines[0]
+    parts = line_of_interest.split()
     return f"{parts[0]}@{parts[1]}"
 
 

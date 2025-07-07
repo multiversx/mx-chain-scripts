@@ -75,7 +75,7 @@ class LaneConfig:
             raise errors.BadConfigurationError(f"for lane {name}, 'working directory' is required")
         if not stages:
             raise errors.BadConfigurationError(f"for lane {name}, 'stages' are required")
-        if len(stages) > len(set(stages)):
+        if len(stages) > len(set(stages_names)):
             raise errors.BadConfigurationError("stages names must be unique")
 
         self.name = name
