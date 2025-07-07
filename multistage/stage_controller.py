@@ -29,6 +29,9 @@ class StageController:
         program = self.config.bin / "node"
         args = self.config.node_arguments
 
+        # Handle "~" in args:
+        args = [arg.replace("~", str(Path.home())) for arg in args]
+
         print(f"Starting node in {working_directory} ...")
         print(args)
 
