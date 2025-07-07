@@ -33,6 +33,40 @@
                     ]
                 }
             ]
+        },
+        {
+            "name": "shard_1",
+            "workingDirectory": "~/mvx-nodes/shard-1",
+            "stages": [
+                {
+                    "name": "andromeda",
+                    "untilEpoch": 4,
+                    "nodeStatusUrl": "http://localhost:8081/node/status",
+                    "configurationArchive": "https://github.com/multiversx/mx-chain-testnet-config/archive/refs/tags/T1.9.6.0.zip",
+                    "bin": "~/mvx-binaries/andromeda",
+                    "nodeArguments": [
+                        "--log-save",
+                        "--log-level=*:DEBUG",
+                        "--rest-api-interface=localhost:8081",
+                        "--operation-mode=full-archive",
+                        "--destination-shard-as-observer=1"
+                    ]
+                },
+                {
+                    "name": "barnard",
+                    "untilEpoch": 4294967295,
+                    "nodeStatusUrl": "http://localhost:8081/node/status",
+                    "configurationArchive": "https://github.com/multiversx/mx-chain-testnet-config/archive/refs/tags/T1.10.1.0.zip",
+                    "bin": "~/mvx-binaries/barnard",
+                    "nodeArguments": [
+                        "--log-save",
+                        "--log-level=*:DEBUG",
+                        "--rest-api-interface=localhost:8081",
+                        "--operation-mode=full-archive",
+                        "--destination-shard-as-observer=1"
+                    ]
+                }
+            ]
         }
     ]
 }

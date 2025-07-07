@@ -19,11 +19,26 @@ pip install -r ./requirements.txt --upgrade
 Skip this flow if you choose to download the pre-built Node artifacts, instead of building them.
 
 ```
-PYTHONPATH=. python3 ./multistage/build.py --workspace=~/mvx-workspace --config=./multistage/build.json
+PYTHONPATH=. python3 ./multistage/build.py --workspace=~/mvx-workspace --config=./multistage/samples/build.json
 ```
 
 ## Set up an observer (or a squad)
 
 ```
-PYTHONPATH=. python3 ./multistage/driver.py --config=./multistage/driver.testnet.json --lane=shard_0 --stage=andromeda
+PYTHONPATH=. python3 ./multistage/driver.py --config=./multistage/samples/testnet_sync.json --lane=shard_0 --stage=andromeda
+
+PYTHONPATH=. python3 ./multistage/driver.py --config=./multistage/samples/testnet_sync.json --lane=shard_1 --stage=andromeda
+...
+```
+
+Once nodes are ready (synchronized to the network), switch to the regular node management scripts.
+
+## Run import-db
+
+```
+PYTHONPATH=. python3 ./multistage/driver.py --config=./multistage/samples/testnet_import_db.json --lane=shard_0 --stage=andromeda
+
+PYTHONPATH=. python3 ./multistage/driver.py --config=./multistage/samples/testnet_import_db.json --lane=shard_1 --stage=andromeda
+
+...
 ```
